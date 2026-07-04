@@ -1,0 +1,8 @@
+{
+  "name": "Profit.co Clone",
+  "description": "An OKR and Performance management dashboard clone.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
