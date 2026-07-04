@@ -4,6 +4,8 @@ import { Dashboard } from './components/Dashboard';
 import { HomeView } from './components/HomeView';
 import { SettingsView } from './components/SettingsView';
 import { PlaceholderView } from './components/PlaceholderView';
+import { GoalSettingView } from './components/GoalSettingView';
+import { KpiSettingView } from './components/KpiSettingView';
 import { cn } from './lib/utils';
 
 type Wallpaper = {
@@ -48,6 +50,10 @@ export default function App() {
         return <HomeView onNavigate={setCurrentTab} cardOpacity={cardOpacity} />;
       case 'Bảng điều khiển':
         return <Dashboard cardOpacity={cardOpacity} />;
+      case 'Mục tiêu & Kết quả (OKRs)':
+        return <GoalSettingView cardOpacity={cardOpacity} />;
+      case 'Chỉ số KPI':
+        return <KpiSettingView cardOpacity={cardOpacity} />;
       case 'Cài đặt':
         return (
           <SettingsView

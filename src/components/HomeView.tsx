@@ -12,7 +12,8 @@ import {
   Filter, 
   Sparkles,
   Search,
-  Bell
+  Bell,
+  Activity
 } from 'lucide-react';
 
 type HomeViewProps = {
@@ -30,10 +31,10 @@ export function HomeView({ onNavigate, cardOpacity }: HomeViewProps) {
   };
 
   const quickStats = [
-    { label: "OKRs cá nhân hoạt động", value: "8", icon: Target, color: "text-blue-500", bg: "bg-blue-50" },
-    { label: "Công việc cần làm", value: "14", icon: CheckSquare, color: "text-emerald-500", bg: "bg-emerald-50" },
-    { label: "Cuộc họp kế tiếp", value: "14:00", icon: Calendar, color: "text-purple-500", bg: "bg-purple-50" },
-    { label: "Lượt khen ngợi nhận được", value: "12", icon: Award, color: "text-amber-500", bg: "bg-amber-50" }
+    { label: "OKRs cá nhân hoạt động", value: "8", icon: Target, color: "text-blue-500", bg: "bg-blue-50", tab: "Mục tiêu & Kết quả (OKRs)" },
+    { label: "Chỉ số KPI vận hành", value: "5 chỉ số", icon: Activity, color: "text-cyan-500", bg: "bg-cyan-50", tab: "Chỉ số KPI" },
+    { label: "Công việc cần làm", value: "14", icon: CheckSquare, color: "text-emerald-500", bg: "bg-emerald-50", tab: "Công việc" },
+    { label: "Cuộc họp kế tiếp", value: "14:00", icon: Calendar, color: "text-purple-500", bg: "bg-purple-50", tab: "Cuộc họp" }
   ];
 
   const recentActivities = [
@@ -137,14 +138,15 @@ export function HomeView({ onNavigate, cardOpacity }: HomeViewProps) {
         {quickStats.map((stat, i) => (
           <div 
             key={i} 
+            onClick={() => onNavigate(stat.tab)}
             style={cardStyle}
-            className="p-5 rounded-[10px] border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-between"
+            className="p-5 rounded-[10px] border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-between cursor-pointer group"
           >
             <div className="space-y-1">
-              <span className="text-[11px] text-gray-500 font-bold uppercase tracking-wider block">{stat.label}</span>
+              <span className="text-[11px] text-gray-500 font-bold uppercase tracking-wider block group-hover:text-blue-600 transition-colors">{stat.label}</span>
               <p className="text-2xl font-bold text-gray-800">{stat.value}</p>
             </div>
-            <div className={`${stat.bg} ${stat.color} p-3 rounded-full shadow-inner`}>
+            <div className={`${stat.bg} ${stat.color} p-3 rounded-full shadow-inner transition-transform group-hover:scale-110`}>
               <stat.icon size={22} />
             </div>
           </div>
