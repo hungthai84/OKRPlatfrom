@@ -6,6 +6,13 @@ import { SettingsView } from './components/SettingsView';
 import { PlaceholderView } from './components/PlaceholderView';
 import { GoalSettingView } from './components/GoalSettingView';
 import { KpiSettingView } from './components/KpiSettingView';
+import { TaskSettingView } from './components/TaskSettingView';
+import { DevGoalSettingView } from './components/DevGoalSettingView';
+import { MeetingSettingView } from './components/MeetingSettingView';
+import PerformanceReviewView from './components/PerformanceReviewView';
+import RewardRecognitionView from './components/RewardRecognitionView';
+import PulseSurveyView from './components/PulseSurveyView';
+import IdeaProjectView from './components/IdeaProjectView';
 import { cn } from './lib/utils';
 
 type Wallpaper = {
@@ -52,8 +59,24 @@ export default function App() {
         return <Dashboard cardOpacity={cardOpacity} />;
       case 'Mục tiêu & Kết quả (OKRs)':
         return <GoalSettingView cardOpacity={cardOpacity} />;
+      case 'Mục tiêu phát triển':
+        return <DevGoalSettingView cardOpacity={cardOpacity} />;
       case 'Chỉ số KPI':
         return <KpiSettingView cardOpacity={cardOpacity} />;
+      case 'Công việc':
+        return <TaskSettingView cardOpacity={cardOpacity} />;
+      case 'Cuộc họp':
+        return <MeetingSettingView cardOpacity={cardOpacity} />;
+      case 'Hiệu suất':
+      case 'Đánh giá':
+      case 'Hiệu chuẩn':
+        return <PerformanceReviewView cardOpacity={cardOpacity} />;
+      case 'Ghi nhận & Khen thưởng':
+        return <RewardRecognitionView cardOpacity={cardOpacity} />;
+      case 'Khảo sát ý kiến':
+        return <PulseSurveyView cardOpacity={cardOpacity} />;
+      case 'Danh mục & Dự án':
+        return <IdeaProjectView cardOpacity={cardOpacity} />;
       case 'Cài đặt':
         return (
           <SettingsView
