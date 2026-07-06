@@ -1,5 +1,22 @@
-import React from 'react';
-import { Sliders, Image, Film, Palette, Grid, Check, Heart, HelpCircle, FileText } from 'lucide-react';
+import React, { useState } from 'react';
+import { 
+  Sliders, 
+  Image, 
+  Film, 
+  Palette, 
+  Grid, 
+  Check, 
+  RotateCcw,
+  BookOpen,
+  Info,
+  Layers,
+  Sparkles,
+  User,
+  Mail,
+  Phone,
+  Briefcase,
+  Camera
+} from 'lucide-react';
 
 type Wallpaper = {
   type: 'image' | 'video' | 'gradient' | 'pattern';
@@ -12,9 +29,30 @@ type Wallpaper = {
 type SettingsViewProps = {
   cardOpacity: number;
   setCardOpacity: (opacity: number) => void;
+  sidebarOpacity: number;
+  setSidebarOpacity: (opacity: number) => void;
   background: Wallpaper;
   setBackground: (bg: Wallpaper) => void;
+  profileName: string;
+  setProfileName: (name: string) => void;
+  profileAvatar: string;
+  setProfileAvatar: (avatar: string) => void;
+  profileRole: string;
+  setProfileRole: (role: string) => void;
+  profileEmail: string;
+  setProfileEmail: (email: string) => void;
+  profilePhone: string;
+  setProfilePhone: (phone: string) => void;
 };
+
+const AVATAR_PRESETS = [
+  "https://i.pravatar.cc/150?u=roberto",
+  "https://i.pravatar.cc/150?u=alex",
+  "https://i.pravatar.cc/150?u=sarah",
+  "https://i.pravatar.cc/150?u=jack",
+  "https://i.pravatar.cc/150?u=lisa",
+  "https://i.pravatar.cc/150?u=maria"
+];
 
 const IMAGE_WALLPAPERS: Wallpaper[] = [
   { type: 'image', value: "https://i.ibb.co/G47jTb1g/minimalist-white-background-3840x2160-bright-space-clean-aesthetic-27644.jpg", name: "Trắng tối giản" },
@@ -110,188 +148,562 @@ const PATTERN_WALLPAPERS: Wallpaper[] = [
   }
 ];
 
-export function SettingsView({ cardOpacity, setCardOpacity, background, setBackground }: SettingsViewProps) {
-  
+export function SettingsView({ 
+  cardOpacity, 
+  setCardOpacity, 
+  sidebarOpacity,
+  setSidebarOpacity,
+  background, 
+  setBackground,
+  profileName,
+  setProfileName,
+  profileAvatar,
+  setProfileAvatar,
+  profileRole,
+  setProfileRole,
+  profileEmail,
+  setProfileEmail,
+  profilePhone,
+  setProfilePhone
+}: SettingsViewProps) {
+  const [activeTab, setActiveTab] = useState<'profile' | 'appearance' | 'instructions'>('profile');
+  const [toastMessage, setToastMessage] = useState('');
+
   const isSelected = (wp: Wallpaper) => {
     return background.type === wp.type && background.value === wp.value;
   };
 
+  const showToast = (msg: string) => {
+    setToastMessage(msg);
+    setTimeout(() => {
+      setToastMessage('');
+    }, 3000);
+  };
+
+  const saveProfile = (e: React.FormEvent) => {
+    e.preventDefault();
+    localStorage.setItem('profile_name', profileName);
+    localStorage.setItem('profile_avatar', profileAvatar);
+    localStorage.setItem('profile_role', profileRole);
+    localStorage.setItem('profile_email', profileEmail);
+    localStorage.setItem('profile_phone', profilePhone);
+    showToast("Đã lưu thông tin hồ sơ thành công!");
+  };
+
+  const resetToDefault = () => {
+    setCardOpacity(90);
+    setSidebarOpacity(90);
+    setBackground({
+      type: 'gradient',
+      value: 'linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)',
+      name: 'Chuyển màu sống động (Chuyển động)',
+    });
+    showToast("Đã đặt lại giao diện mặc định!");
+  };
+
+  const cardStyle = { 
+    backgroundColor: `rgba(255, 255, 255, ${cardOpacity / 100})`,
+    backdropFilter: 'blur(12px)'
+  };
+
   return (
-    <div className="flex-1 overflow-auto p-6 space-y-8 select-none">
+    <div className="flex-1 overflow-auto p-6 space-y-6 flex flex-col select-none">
       
-      {/* 1. CARD TRANSPARENCY SLIDER */}
-      <div className="bg-white/90 backdrop-blur-md rounded-xl p-6 border border-gray-100 shadow-sm space-y-4">
-        <div className="flex items-center space-x-3 text-gray-800">
-          <div className="bg-blue-50 text-blue-600 p-2 rounded-lg">
-            <Sliders size={20} />
+      {/* 7. BỐ CỤC TRANG NỘI DUNG: BANNER BO CONG 4 GÓC 10PX */}
+      <div className="bg-gradient-to-r from-slate-700 via-slate-800 to-slate-900 rounded-[10px] shadow-lg p-6 text-white relative overflow-hidden transition-all duration-300 shrink-0">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 z-10 relative">
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center animate-pulse">
+              <User size={26} className="text-blue-400" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight">Cấu hình Cá nhân & Hệ thống</h2>
+              <p className="text-xs text-slate-300">
+                Tùy chỉnh thông tin hồ sơ cá nhân và cấu hình không gian làm việc số: thanh menu, thẻ nội dung, ảnh nền nghệ thuật.
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="font-bold text-base">Độ trong suốt của thẻ nội dung</h3>
-            <p className="text-xs text-gray-400">Điều chỉnh độ hiển thị mờ đục hoặc trong suốt của hộp chứa thông tin.</p>
+
+          <div className="flex items-center gap-3 shrink-0 flex-wrap">
+            <button 
+              onClick={resetToDefault}
+              className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white px-4 py-2.5 rounded-lg text-xs font-bold shadow-md hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
+            >
+              <RotateCcw className="w-4 h-4 text-orange-400" /> Đặt lại mặc định
+            </button>
           </div>
         </div>
 
-        <div className="flex items-center space-x-6 pt-2">
-          <input
-            type="range"
-            min="10"
-            max="100"
-            value={cardOpacity}
-            onChange={(e) => setCardOpacity(parseInt(e.target.value))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
-          />
-          <div className="bg-blue-600 text-white font-bold px-3 py-1.5 rounded-lg text-sm shrink-0 shadow-sm">
-            {cardOpacity}%
+        {/* SUB NAVIGATION TABS */}
+        <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex space-x-6 text-sm font-semibold">
+            <button 
+              onClick={() => setActiveTab('profile')}
+              className={`pb-1 border-b-2 cursor-pointer transition-all ${
+                activeTab === 'profile' ? 'border-orange-500 text-white font-bold' : 'border-transparent text-gray-400 hover:text-white'
+              }`}
+            >
+              Hồ sơ cá nhân
+            </button>
+            <button 
+              onClick={() => setActiveTab('appearance')}
+              className={`pb-1 border-b-2 cursor-pointer transition-all ${
+                activeTab === 'appearance' ? 'border-orange-500 text-white font-bold' : 'border-transparent text-gray-400 hover:text-white'
+              }`}
+            >
+              Tùy chỉnh Giao diện
+            </button>
+            <button 
+              onClick={() => setActiveTab('instructions')}
+              className={`pb-1 border-b-2 cursor-pointer transition-all ${
+                activeTab === 'instructions' ? 'border-orange-500 text-white font-bold' : 'border-transparent text-gray-400 hover:text-white'
+              }`}
+            >
+              Hướng dẫn Sử dụng
+            </button>
           </div>
-        </div>
-        <div className="text-xs text-gray-400 italic">
-          * Thẻ nội dung được thiết kế nền màu trắng. Giảm độ phần trăm để nhìn thấy hình nền hoặc video động ở phía sau.
         </div>
       </div>
 
-      {/* 2. BACKGROUND SELECTION AREA */}
-      <div className="bg-white/90 backdrop-blur-md rounded-xl p-6 border border-gray-100 shadow-sm space-y-6">
-        <div className="flex items-center space-x-3 text-gray-800 border-b border-gray-100 pb-4">
-          <div className="bg-orange-50 text-orange-600 p-2 rounded-lg">
-            <Palette size={20} />
-          </div>
-          <div>
-            <h3 className="font-bold text-base">Cấu hình hình nền toàn trang</h3>
-            <p className="text-xs text-gray-400">Thay đổi ảnh nền tĩnh, video nghệ thuật động, dải màu gradient hoặc họa tiết chấm.</p>
-          </div>
+      {/* Toast Alert */}
+      {toastMessage && (
+        <div className="fixed top-24 right-10 bg-slate-900 text-white font-bold px-4 py-2.5 rounded-xl shadow-2xl z-50 border border-slate-700 text-xs animate-in fade-in slide-in-from-top-4 duration-200">
+          ✨ {toastMessage}
         </div>
+      )}
 
-        {/* STATIC IMAGE WALLPAPERS */}
-        <div className="space-y-3">
-          <div className="flex items-center space-x-2 text-sm font-bold text-gray-700">
-            <Image size={16} className="text-blue-500" />
-            <span>Hình nền Ảnh tĩnh (Image Wallpapers)</span>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {IMAGE_WALLPAPERS.map((wp, idx) => (
-              <button
-                key={idx}
-                onClick={() => setBackground(wp)}
-                className={`relative rounded-lg overflow-hidden h-20 border-2 transition-all group ${
-                  isSelected(wp) ? 'border-blue-600 ring-2 ring-blue-600/30 scale-[0.98]' : 'border-transparent hover:border-gray-300'
-                }`}
-                title={wp.name}
-              >
-                <img src={wp.value} alt={wp.name} className="w-full h-full object-cover transition-transform group-hover:scale-110 duration-500" />
-                <div className="absolute inset-x-0 bottom-0 bg-black/60 py-1 px-1.5 text-[9px] text-white truncate text-center font-medium">
-                  {wp.name}
+      {/* CORE CONTENT */}
+      <div className="flex-1 flex flex-col gap-6 min-h-0">
+        
+        {/* TAB 1: PROFILE EDITOR */}
+        {activeTab === 'profile' && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in">
+            {/* Visual Live Preview Card */}
+            <div style={cardStyle} className="rounded-[10px] border border-slate-200/60 p-6 shadow-sm flex flex-col items-center justify-center text-center space-y-4">
+              <div className="text-xs font-black uppercase text-slate-500 tracking-wider">
+                Xem trước thẻ hiển thị
+              </div>
+              <div className="relative">
+                <img 
+                  src={profileAvatar} 
+                  alt={profileName} 
+                  className="w-24 h-24 rounded-full border-4 border-orange-500 shadow-xl object-cover"
+                />
+                <div className="absolute bottom-0 right-0 bg-orange-500 text-white p-1.5 rounded-full shadow-md">
+                  <Camera size={14} />
                 </div>
-                {isSelected(wp) && (
-                  <div className="absolute top-1.5 right-1.5 bg-blue-600 text-white p-1 rounded-full shadow-md">
-                    <Check size={8} className="stroke-[4]" />
-                  </div>
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* VIDEO WALLPAPERS */}
-        <div className="space-y-3 pt-4 border-t border-gray-100">
-          <div className="flex items-center space-x-2 text-sm font-bold text-gray-700">
-            <Film size={16} className="text-orange-500" />
-            <span>Hình nền Video nghệ thuật (Video Wallpapers)</span>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
-            {VIDEO_WALLPAPERS.map((wp, idx) => (
-              <button
-                key={idx}
-                onClick={() => setBackground(wp)}
-                className={`relative rounded-lg overflow-hidden h-24 border-2 transition-all group ${
-                  isSelected(wp) ? 'border-orange-500 ring-2 ring-orange-500/30 scale-[0.98]' : 'border-transparent hover:border-gray-300'
-                }`}
-                title={wp.name}
-              >
-                {wp.thumbnail ? (
-                  <img src={wp.thumbnail} alt={wp.name} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full bg-slate-900 flex flex-col items-center justify-center text-slate-500">
-                    <Film size={20} className="mb-1" />
-                    <span className="text-[9px]">Video Mp4</span>
-                  </div>
-                )}
-                {/* Visual marker of video */}
-                <span className="absolute top-1.5 left-1.5 bg-black/60 rounded px-1 text-[8px] font-bold text-orange-400">
-                  MOV
-                </span>
-                <div className="absolute inset-x-0 bottom-0 bg-black/60 py-1 px-1.5 text-[9px] text-white truncate text-center font-medium">
-                  {wp.name}
+              </div>
+              <div>
+                <h3 className="font-extrabold text-lg text-slate-800">{profileName}</h3>
+                <p className="text-xs text-slate-500 bg-slate-100 px-3 py-1 rounded-full mt-1.5 inline-block font-semibold">
+                  {profileRole}
+                </p>
+              </div>
+              <div className="w-full border-t border-slate-200/50 pt-4 space-y-2 text-left text-xs text-slate-600">
+                <div className="flex items-center space-x-2">
+                  <Mail size={14} className="text-slate-400 shrink-0" />
+                  <span className="truncate">{profileEmail}</span>
                 </div>
-                {isSelected(wp) && (
-                  <div className="absolute top-1.5 right-1.5 bg-orange-500 text-white p-1 rounded-full shadow-md">
-                    <Check size={8} className="stroke-[4]" />
-                  </div>
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* GRADIENT WALLPAPERS */}
-        <div className="space-y-3 pt-4 border-t border-gray-100">
-          <div className="flex items-center space-x-2 text-sm font-bold text-gray-700">
-            <Palette size={16} className="text-pink-500" />
-            <span>Hình nền Dải màu CSS (Gradient Wallpapers)</span>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {GRADIENT_WALLPAPERS.map((wp, idx) => (
-              <button
-                key={idx}
-                onClick={() => setBackground(wp)}
-                className={`relative rounded-lg overflow-hidden h-16 border-2 transition-all group ${
-                  isSelected(wp) ? 'border-pink-500 ring-2 ring-pink-500/30 scale-[0.98]' : 'border-transparent hover:border-gray-300'
-                }`}
-                style={{ background: wp.value }}
-                title={wp.name}
-              >
-                <div className="absolute inset-x-0 bottom-0 bg-black/40 py-1 px-1.5 text-[9px] text-white truncate text-center font-semibold">
-                  {wp.name}
+                <div className="flex items-center space-x-2">
+                  <Phone size={14} className="text-slate-400 shrink-0" />
+                  <span>{profilePhone}</span>
                 </div>
-                {isSelected(wp) && (
-                  <div className="absolute top-1.5 right-1.5 bg-pink-500 text-white p-1 rounded-full shadow-md">
-                    <Check size={8} className="stroke-[4]" />
-                  </div>
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
+              </div>
+            </div>
 
-        {/* CUSTOM PATTERNS */}
-        <div className="space-y-3 pt-4 border-t border-gray-100">
-          <div className="flex items-center space-x-2 text-sm font-bold text-gray-700">
-            <Grid size={16} className="text-emerald-500" />
-            <span>Hình nền Họa tiết đặc biệt (Custom Patterns)</span>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            {PATTERN_WALLPAPERS.map((wp, idx) => (
-              <button
-                key={idx}
-                onClick={() => setBackground(wp)}
-                className={`relative rounded-lg overflow-hidden h-20 border-2 transition-all group ${
-                  isSelected(wp) ? 'border-emerald-500 ring-2 ring-emerald-500/30 scale-[0.98]' : 'border-transparent hover:border-gray-300'
-                }`}
-                style={wp.style}
-                title={wp.name}
-              >
-                <div className="absolute inset-x-0 bottom-0 bg-black/60 py-1 px-1.5 text-[9px] text-white truncate text-center font-semibold">
-                  {wp.name}
+            {/* Editor Form */}
+            <div style={cardStyle} className="lg:col-span-2 rounded-[10px] border border-slate-200/60 p-6 shadow-sm">
+              <form onSubmit={saveProfile} className="space-y-4">
+                <div className="flex items-center space-x-2 border-b border-slate-100 pb-3 mb-2">
+                  <User size={18} className="text-orange-500" />
+                  <h3 className="font-extrabold text-base text-slate-800">Cập nhật thông tin chi tiết</h3>
                 </div>
-                {isSelected(wp) && (
-                  <div className="absolute top-1.5 right-1.5 bg-emerald-500 text-white p-1 rounded-full shadow-md">
-                    <Check size={8} className="stroke-[4]" />
-                  </div>
-                )}
-              </button>
-            ))}
-          </div>
-        </div>
 
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-600">Họ và tên</label>
+                    <input
+                      type="text"
+                      required
+                      value={profileName}
+                      onChange={(e) => {
+                        setProfileName(e.target.value);
+                        localStorage.setItem('profile_name', e.target.value);
+                      }}
+                      className="w-full text-xs font-bold px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-600">Chức vụ</label>
+                    <input
+                      type="text"
+                      required
+                      value={profileRole}
+                      onChange={(e) => {
+                        setProfileRole(e.target.value);
+                        localStorage.setItem('profile_role', e.target.value);
+                      }}
+                      className="w-full text-xs font-bold px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-600">Địa chỉ Email</label>
+                    <input
+                      type="email"
+                      required
+                      value={profileEmail}
+                      onChange={(e) => {
+                        setProfileEmail(e.target.value);
+                        localStorage.setItem('profile_email', e.target.value);
+                      }}
+                      className="w-full text-xs font-bold px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500"
+                    />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <label className="text-xs font-bold text-slate-600">Số điện thoại</label>
+                    <input
+                      type="text"
+                      required
+                      value={profilePhone}
+                      onChange={(e) => {
+                        setProfilePhone(e.target.value);
+                        localStorage.setItem('profile_phone', e.target.value);
+                      }}
+                      className="w-full text-xs font-bold px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="text-xs font-bold text-slate-600">Đường dẫn ảnh đại diện (URL)</label>
+                  <input
+                    type="url"
+                    required
+                    value={profileAvatar}
+                    onChange={(e) => {
+                      setProfileAvatar(e.target.value);
+                      localStorage.setItem('profile_avatar', e.target.value);
+                    }}
+                    className="w-full text-xs font-bold px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/30 focus:border-blue-500"
+                  />
+                </div>
+
+                <div className="space-y-2 pt-2">
+                  <label className="text-xs font-bold text-slate-600 block">Chọn ảnh đại diện nhanh</label>
+                  <div className="flex space-x-3">
+                    {AVATAR_PRESETS.map((preset, idx) => (
+                      <button
+                        type="button"
+                        key={idx}
+                        onClick={() => {
+                          setProfileAvatar(preset);
+                          localStorage.setItem('profile_avatar', preset);
+                        }}
+                        className={`w-10 h-10 rounded-full border-2 overflow-hidden transition-all hover:scale-110 cursor-pointer ${
+                          profileAvatar === preset ? 'border-orange-500 scale-105 ring-2 ring-orange-500/20' : 'border-transparent'
+                        }`}
+                      >
+                        <img src={preset} alt="preset" className="w-full h-full object-cover" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="pt-4 flex justify-end">
+                  <button
+                    type="submit"
+                    className="bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs px-5 py-2.5 rounded-lg shadow-md transition-all active:scale-95 cursor-pointer"
+                  >
+                    Lưu thông tin hồ sơ
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 2: APPEARANCE CUSTOMIZER */}
+        {activeTab === 'appearance' && (
+          <div className="space-y-6 animate-fade-in">
+            {/* 1. DOUBLE TRANSPARENCY SLIDERS */}
+            <div 
+              style={cardStyle}
+              className="rounded-[10px] border border-slate-200/60 p-6 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-6"
+            >
+              {/* Card opacity */}
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3 text-slate-800">
+                  <div className="bg-blue-50 text-blue-600 p-2 rounded-xl">
+                    <Sliders size={18} />
+                  </div>
+                  <div>
+                    <h3 className="font-extrabold text-sm text-slate-800">Độ trong suốt thẻ nội dung</h3>
+                    <p className="text-[10px] text-slate-500">Mức độ mờ kính Glassmorphism của các phân vùng làm việc.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-4 pt-1">
+                  <input
+                    type="range"
+                    min="10"
+                    max="100"
+                    value={cardOpacity}
+                    onChange={(e) => setCardOpacity(parseInt(e.target.value))}
+                    className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600"
+                  />
+                  <div className="bg-blue-600 text-white font-bold px-2.5 py-1 rounded-lg text-xs shrink-0 shadow-sm">
+                    {cardOpacity}%
+                  </div>
+                </div>
+              </div>
+
+              {/* Sidebar opacity */}
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3 text-slate-800">
+                  <div className="bg-orange-50 text-orange-600 p-2 rounded-xl">
+                    <Layers size={18} />
+                  </div>
+                  <div>
+                    <h3 className="font-extrabold text-sm text-slate-800">Độ trong suốt thanh menu (Sidebar)</h3>
+                    <p className="text-[10px] text-slate-500">Mức độ mờ kính của thanh điều hướng menu bên trái.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-4 pt-1">
+                  <input
+                    type="range"
+                    min="10"
+                    max="100"
+                    value={sidebarOpacity}
+                    onChange={(e) => setSidebarOpacity(parseInt(e.target.value))}
+                    className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-orange-500"
+                  />
+                  <div className="bg-orange-500 text-white font-bold px-2.5 py-1 rounded-lg text-xs shrink-0 shadow-sm">
+                    {sidebarOpacity}%
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 2. BACKGROUND SELECTION AREA */}
+            <div 
+              style={cardStyle}
+              className="rounded-[10px] border border-slate-200/60 p-6 shadow-sm space-y-8"
+            >
+              <div className="flex items-center space-x-3 text-slate-800 border-b border-slate-100 pb-4">
+                <div className="bg-orange-50 text-orange-600 p-2.5 rounded-xl">
+                  <Palette size={20} />
+                </div>
+                <div>
+                  <h3 className="font-extrabold text-base text-slate-800">Cấu hình hình nền toàn trang</h3>
+                  <p className="text-xs text-slate-500">Thay đổi ảnh nền tĩnh sắc nét, video phong cảnh chuyển động nghệ thuật, hoặc dải sắc gradient.</p>
+                </div>
+              </div>
+
+              {/* STATIC IMAGE WALLPAPERS */}
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2 text-xs font-black uppercase text-slate-500 tracking-wider">
+                  <Image size={15} className="text-blue-500" />
+                  <span>Hình nền Ảnh tĩnh (Image)</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                  {IMAGE_WALLPAPERS.map((wp, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setBackground(wp)}
+                      className={`relative rounded-xl overflow-hidden h-20 border-2 transition-all group cursor-pointer ${
+                        isSelected(wp) ? 'border-blue-600 ring-2 ring-blue-600/30 scale-[0.97]' : 'border-transparent hover:border-slate-300'
+                      }`}
+                      title={wp.name}
+                    >
+                      <img src={wp.value} alt={wp.name} className="w-full h-full object-cover transition-transform group-hover:scale-110 duration-500" />
+                      <div className="absolute inset-x-0 bottom-0 bg-black/60 py-1 px-1.5 text-[9px] text-white truncate text-center font-bold">
+                        {wp.name}
+                      </div>
+                      {isSelected(wp) && (
+                        <div className="absolute top-1.5 right-1.5 bg-blue-600 text-white p-1 rounded-full shadow-md">
+                          <Check size={8} className="stroke-[4]" />
+                        </div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* VIDEO WALLPAPERS */}
+              <div className="space-y-3 pt-6 border-t border-slate-100">
+                <div className="flex items-center space-x-2 text-xs font-black uppercase text-slate-500 tracking-wider">
+                  <Film size={15} className="text-orange-500" />
+                  <span>Hình nền Video nghệ thuật (Video Live)</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                  {VIDEO_WALLPAPERS.map((wp, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setBackground(wp)}
+                      className={`relative rounded-xl overflow-hidden h-24 border-2 transition-all group cursor-pointer ${
+                        isSelected(wp) ? 'border-orange-500 ring-2 ring-orange-500/30 scale-[0.97]' : 'border-transparent hover:border-slate-300'
+                      }`}
+                      title={wp.name}
+                    >
+                      {wp.thumbnail ? (
+                        <img src={wp.thumbnail} alt={wp.name} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full bg-slate-900 flex flex-col items-center justify-center text-slate-500">
+                          <Film size={20} className="mb-1" />
+                          <span className="text-[9px]">Video Mp4</span>
+                        </div>
+                      )}
+                      <span className="absolute top-1.5 left-1.5 bg-black/60 rounded px-1 text-[8px] font-bold text-orange-400">
+                        MOV
+                      </span>
+                      <div className="absolute inset-x-0 bottom-0 bg-black/60 py-1 px-1.5 text-[9px] text-white truncate text-center font-bold">
+                        {wp.name}
+                      </div>
+                      {isSelected(wp) && (
+                        <div className="absolute top-1.5 right-1.5 bg-orange-500 text-white p-1 rounded-full shadow-md">
+                          <Check size={8} className="stroke-[4]" />
+                        </div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* GRADIENT WALLPAPERS */}
+              <div className="space-y-3 pt-6 border-t border-slate-100">
+                <div className="flex items-center space-x-2 text-xs font-black uppercase text-slate-500 tracking-wider">
+                  <Palette size={15} className="text-pink-500" />
+                  <span>Hình nền Dải màu CSS (Dynamic Gradient)</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                  {GRADIENT_WALLPAPERS.map((wp, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setBackground(wp)}
+                      className={`relative rounded-xl overflow-hidden h-16 border-2 transition-all group cursor-pointer ${
+                        isSelected(wp) ? 'border-pink-500 ring-2 ring-pink-500/30 scale-[0.97]' : 'border-transparent hover:border-slate-300'
+                      }`}
+                      style={{ background: wp.value }}
+                      title={wp.name}
+                    >
+                      <div className="absolute inset-x-0 bottom-0 bg-black/40 py-1 px-1.5 text-[9px] text-white truncate text-center font-black">
+                        {wp.name}
+                      </div>
+                      {isSelected(wp) && (
+                        <div className="absolute top-1.5 right-1.5 bg-pink-500 text-white p-1 rounded-full shadow-md">
+                          <Check size={8} className="stroke-[4]" />
+                        </div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* CUSTOM PATTERNS */}
+              <div className="space-y-3 pt-6 border-t border-slate-100">
+                <div className="flex items-center space-x-2 text-xs font-black uppercase text-slate-500 tracking-wider">
+                  <Grid size={15} className="text-emerald-500" />
+                  <span>Hình nền Họa tiết đặc biệt (Patterns)</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {PATTERN_WALLPAPERS.map((wp, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setBackground(wp)}
+                      className={`relative rounded-xl overflow-hidden h-20 border-2 transition-all group cursor-pointer ${
+                        isSelected(wp) ? 'border-emerald-500 ring-2 ring-emerald-500/30 scale-[0.97]' : 'border-transparent hover:border-slate-300'
+                      }`}
+                      style={wp.style}
+                      title={wp.name}
+                    >
+                      <div className="absolute inset-x-0 bottom-0 bg-black/60 py-1 px-1.5 text-[9px] text-white truncate text-center font-bold">
+                        {wp.name}
+                      </div>
+                      {isSelected(wp) && (
+                        <div className="absolute top-1.5 right-1.5 bg-emerald-500 text-white p-1 rounded-full shadow-md">
+                          <Check size={8} className="stroke-[4]" />
+                        </div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 3: INSTRUCTIONS */}
+        {activeTab === 'instructions' && (
+          <div 
+            style={cardStyle}
+            className="rounded-[10px] border border-slate-200/60 p-8 shadow-sm space-y-6 text-slate-700 text-xs leading-relaxed animate-fade-in"
+          >
+            <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+              <BookOpen className="w-5 h-5 text-indigo-600" />
+              <h3 className="text-sm font-black text-slate-800 uppercase tracking-wider">
+                HƯỚNG DẪN TRẢI NGHIỆM KHÔNG GIAN SỐ POWER SERVICE
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-3">
+                <h4 className="font-extrabold text-slate-800 text-sm flex items-center gap-1.5 pb-1">
+                  <span className="flex items-center justify-center w-5 h-5 rounded-full bg-indigo-50 text-indigo-600 text-[10px] font-black">1</span>
+                  Hiệu ứng Glassmorphism & Bo góc
+                </h4>
+                <p className="text-slate-600 pl-6">
+                  Toàn bộ khung giao diện chính được thiết kế bo cong đồng bộ <strong>10px (rounded-[10px])</strong> mang đến vẻ thanh lịch, hài hòa. Hiệu ứng mờ đục "kính mờ" (Glassmorphism) hòa quyện tuyệt vời với hình nền chuyển động nghệ thuật mà vẫn duy trì tính dễ đọc thông tin.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <h4 className="font-extrabold text-slate-800 text-sm flex items-center gap-1.5 pb-1">
+                  <span className="flex items-center justify-center w-5 h-5 rounded-full bg-indigo-50 text-indigo-600 text-[10px] font-black">2</span>
+                  Đồng bộ đổi viền 3D tự động
+                </h4>
+                <p className="text-slate-600 pl-6">
+                  Viền ngoài của trang web được lập trình chuyển sắc <strong>tự động sau mỗi 1 phút (60 giây)</strong> giúp kích hoạt sự tập trung, tăng cường trải nghiệm thị giác thú vị và đổi mới năng lượng tích cực suốt ngày làm việc.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <h4 className="font-extrabold text-slate-800 text-sm flex items-center gap-1.5 pb-1">
+                  <span className="flex items-center justify-center w-5 h-5 rounded-full bg-indigo-50 text-indigo-600 text-[10px] font-black">3</span>
+                  Hình nền nghệ thuật đa dạng
+                </h4>
+                <p className="text-slate-600 pl-6">
+                  Người dùng có thể lựa chọn 4 loại hình nền thích hợp tùy theo tâm trạng làm việc: ảnh phong cảnh tối giản tĩnh lặng, video động nghệ thuật tuần hoàn, dải màu gradient dốc đa chiều chuyển sắc, hoặc họa tiết chấm tối giản.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <h4 className="font-extrabold text-slate-800 text-sm flex items-center gap-1.5 pb-1">
+                  <span className="flex items-center justify-center w-5 h-5 rounded-full bg-indigo-50 text-indigo-600 text-[10px] font-black">4</span>
+                  Khám phá các phân hệ OKRs & KPIs
+                </h4>
+                <p className="text-slate-600 pl-6">
+                  Dễ dàng phối hợp giữa mục tiêu chiến lược <strong>OKRs</strong> của doanh nghiệp với các chỉ số đo lường hiệu suất thực tế <strong>KPIs</strong>, cùng phân rã sang các nhóm <strong>Dự án</strong> và <strong>Công việc</strong> của cá nhân.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-indigo-50 p-4 rounded-xl border border-indigo-100 flex items-start gap-2.5 mt-4">
+              <Sparkles className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="font-extrabold text-indigo-800 mb-1">
+                  Mẹo cấu hình tốt nhất
+                </p>
+                <p className="text-indigo-950 font-medium text-[11px]">
+                  Nếu bạn lựa chọn hình nền <strong>Video nghệ thuật</strong> chuyển động, hãy đặt độ trong suốt của thẻ nội dung về khoảng <strong>80% - 90%</strong> để cảm nhận trọn vẹn vẻ dải hạt sáng lấp lánh và cát lún ngân hà.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

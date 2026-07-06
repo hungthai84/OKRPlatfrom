@@ -330,7 +330,7 @@ export function GoalSettingView({ cardOpacity }: { cardOpacity: number }) {
               date: new Date().toISOString().split('T')[0],
               value: newVal,
               progress: newProgress,
-              note: checkInNote || 'Cập nhật định kỳ qua bảng Profit.co',
+              note: checkInNote || 'Cập nhật định kỳ qua hệ thống',
               author: 'Roberto Canevari'
             };
 
@@ -402,73 +402,77 @@ export function GoalSettingView({ cardOpacity }: { cardOpacity: number }) {
     return matchesSearch && matchesCategory;
   });
 
+  const cardStyle = { 
+    backgroundColor: 'rgba(255, 255, 255, 0.45)',
+    backdropFilter: 'blur(12px)'
+  };
+
   return (
-    <div className="flex-1 flex flex-col h-full bg-[#f8fafc]/90 overflow-hidden select-none">
+    <div className="flex-1 overflow-auto p-6 space-y-6 flex flex-col select-none">
       
-      {/* HEADER BAR FOR GOAL MANAGEMENT */}
-      <div className="bg-white border-b border-slate-200/80 px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0 shrink-0">
-        <div className="flex items-center space-x-3">
-          <div className="p-2.5 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl text-white shadow-md shadow-blue-500/20">
-            <Target size={22} className="animate-pulse" />
+      {/* 7. BỐ CỤC TRANG NỘI DUNG: BANNER BO CONG 4 GÓC 10PX */}
+      <div className="bg-gradient-to-r from-amber-600 via-orange-600 to-rose-700 rounded-[10px] shadow-lg p-6 text-white relative overflow-hidden transition-all duration-300 shrink-0">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 z-10 relative">
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center animate-pulse">
+              <Target size={26} className="text-amber-200" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2">
+                <span>Mục tiêu & Kết quả chính (OKRs)</span>
+              </h2>
+              <p className="text-xs text-orange-100">
+                Quản trị OKRs bài bản theo chuẩn mực quốc tế: Thiết lập, Cân bằng và Căn chỉnh mục tiêu doanh nghiệp.
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-lg font-extrabold text-slate-800 tracking-tight flex items-center space-x-1.5">
-              <span>Mục tiêu & Kết quả chính (OKRs)</span>
-              <span className="text-[10px] bg-amber-500 text-white font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                Profit.co Engine
-              </span>
-            </h1>
-            <p className="text-xs text-slate-500 font-medium">
-              Quản trị OKRs bài bản theo chuẩn mực quốc tế: Thiết lập, Cân bằng và Căn chỉnh mục tiêu doanh nghiệp.
-            </p>
+
+          {/* SUB NAVIGATION TABS */}
+          <div className="flex bg-white/10 p-1 rounded-xl border border-white/10 self-start md:self-auto shrink-0">
+            <button
+              onClick={() => setActiveSubTab('manage')}
+              className={cn(
+                "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5",
+                activeSubTab === 'manage' 
+                  ? "bg-white text-orange-700 shadow-md" 
+                  : "text-orange-100 hover:text-white"
+              )}
+            >
+              <Sliders size={14} />
+              <span>Danh sách OKRs</span>
+            </button>
+            
+            <button
+              onClick={() => setActiveSubTab('create')}
+              className={cn(
+                "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5",
+                activeSubTab === 'create' 
+                  ? "bg-white text-orange-700 shadow-md" 
+                  : "text-orange-100 hover:text-white"
+              )}
+            >
+              <Plus size={14} />
+              <span>Thiết lập mục tiêu mới</span>
+            </button>
+
+            <button
+              onClick={() => setActiveSubTab('tree')}
+              className={cn(
+                "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5",
+                activeSubTab === 'tree' 
+                  ? "bg-white text-orange-700 shadow-md" 
+                  : "text-orange-100 hover:text-white"
+              )}
+            >
+              <GitPullRequest size={14} />
+              <span>Sơ đồ liên kết</span>
+            </button>
           </div>
-        </div>
-
-        {/* SUB NAVIGATION TABS */}
-        <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200/50 self-start md:self-auto">
-          <button
-            onClick={() => setActiveSubTab('manage')}
-            className={cn(
-              "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5",
-              activeSubTab === 'manage' 
-                ? "bg-white text-blue-600 shadow-sm" 
-                : "text-slate-500 hover:text-slate-800"
-            )}
-          >
-            <Sliders size={14} />
-            <span>Danh sách OKRs</span>
-          </button>
-          
-          <button
-            onClick={() => setActiveSubTab('create')}
-            className={cn(
-              "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5",
-              activeSubTab === 'create' 
-                ? "bg-white text-blue-600 shadow-sm" 
-                : "text-slate-500 hover:text-slate-800"
-            )}
-          >
-            <Plus size={14} />
-            <span>Thiết lập mục tiêu mới</span>
-          </button>
-
-          <button
-            onClick={() => setActiveSubTab('tree')}
-            className={cn(
-              "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5",
-              activeSubTab === 'tree' 
-                ? "bg-white text-blue-600 shadow-sm" 
-                : "text-slate-500 hover:text-slate-800"
-            )}
-          >
-            <GitPullRequest size={14} />
-            <span>Sơ đồ liên kết</span>
-          </button>
         </div>
       </div>
 
       {/* CONTENT AREA */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+      <div className="flex-1 flex flex-col gap-6 min-h-0">
         
         {/* TAB 1: LIST AND CHECK-IN */}
         {activeSubTab === 'manage' && (
@@ -726,7 +730,7 @@ export function GoalSettingView({ cardOpacity }: { cardOpacity: number }) {
                 <span>Kiến tạo OKRs doanh nghiệp chuẩn chỉnh</span>
               </h2>
               <p className="text-xs text-slate-400 mt-1">
-                Theo học thuyết Profit.co, cấu trúc mục tiêu phải hướng đến kết quả định lượng cụ thể, có phân định trọng số và phân rã các bước thực hiện.
+                Theo các học thuyết quản trị hiện đại, cấu trúc mục tiêu phải hướng đến kết quả định lượng cụ thể, có phân định trọng số và phân rã các bước thực hiện.
               </p>
             </div>
 
@@ -982,7 +986,7 @@ export function GoalSettingView({ cardOpacity }: { cardOpacity: number }) {
               <div>
                 <h4 className="text-xs font-bold text-amber-800">Cơ chế Căn chỉnh liên thông (Goal Alignment Map)</h4>
                 <p className="text-[11px] text-amber-700 mt-1 leading-relaxed">
-                  Profit.co giúp doanh nghiệp đồng bộ hóa chiến lược bằng cách liên kết trực tiếp OKR bộ phận/cá nhân với mục tiêu cốt lõi của công ty. Khi các mục tiêu con đạt được tiến bộ, chúng sẽ tự động đóng góp vào hiệu suất chung của tổ chức theo thời gian thực.
+                  Hệ thống giúp doanh nghiệp đồng bộ hóa chiến lược bằng cách liên kết trực tiếp OKR bộ phận/cá nhân với mục tiêu cốt lõi của công ty. Khi các mục tiêu con đạt được tiến bộ, chúng sẽ tự động đóng góp vào hiệu suất chung của tổ chức theo thời gian thực.
                 </p>
               </div>
             </div>
@@ -1086,7 +1090,7 @@ export function GoalSettingView({ cardOpacity }: { cardOpacity: number }) {
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-5">
               <div className="flex items-center space-x-2 text-xs text-blue-100 font-bold uppercase tracking-wider mb-1">
                 <Award size={14} className="animate-bounce" />
-                <span>Profit.co Smart Check-in Workspace</span>
+                <span>Smart Check-in Workspace</span>
               </div>
               <h3 className="text-sm font-black leading-snug">{selectedKR.name}</h3>
               <p className="text-[11px] text-blue-100/80 mt-1 italic font-medium">
@@ -1228,7 +1232,7 @@ export function GoalSettingView({ cardOpacity }: { cardOpacity: number }) {
                 onClick={handleCheckInSubmit}
                 className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-5 py-2 rounded-xl text-xs font-bold hover:from-blue-700 hover:to-indigo-700 cursor-pointer transition-all shadow-md shadow-blue-500/10"
               >
-                Cập nhật lên Profit.co
+                Cập nhật hệ thống
               </button>
             </div>
 

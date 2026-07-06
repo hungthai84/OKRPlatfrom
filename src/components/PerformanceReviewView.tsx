@@ -202,7 +202,7 @@ export default function PerformanceReviewView({ cardOpacity }: PerformanceReview
             <div>
               <h2 className="text-2xl font-bold tracking-tight">Hiệu suất phát triển</h2>
               <p className="text-xs text-blue-200">
-                Chu trình đánh giá năng lực 360 độ, hiệu chuẩn ma trận 9-Box và định vị hiệu suất giống Profit.co
+                Chu trình đánh giá năng lực 360 độ, hiệu chuẩn ma trận 9-Box và định vị hiệu suất toàn diện
               </p>
             </div>
           </div>
@@ -581,7 +581,7 @@ export default function PerformanceReviewView({ cardOpacity }: PerformanceReview
                 <div className="bg-slate-800 text-white p-4 flex justify-between items-center">
                   <h4 className="font-bold text-xs uppercase tracking-widest flex items-center space-x-2">
                     <TrendingUp size={14} className="text-orange-400" />
-                    <span>Ma trận 9-Box Calibration (Tầm nhìn Profit.co)</span>
+                    <span>Ma trận 9-Box Calibration (Power Service)</span>
                   </h4>
                   <span className="text-[10px] text-slate-300 font-bold">Y-Axis: Tiềm năng | X-Axis: Năng lực</span>
                 </div>

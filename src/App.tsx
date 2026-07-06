@@ -6,13 +6,17 @@ import { SettingsView } from './components/SettingsView';
 import { PlaceholderView } from './components/PlaceholderView';
 import { GoalSettingView } from './components/GoalSettingView';
 import { KpiSettingView } from './components/KpiSettingView';
-import { TaskSettingView } from './components/TaskSettingView';
 import { DevGoalSettingView } from './components/DevGoalSettingView';
 import { MeetingSettingView } from './components/MeetingSettingView';
 import PerformanceReviewView from './components/PerformanceReviewView';
 import RewardRecognitionView from './components/RewardRecognitionView';
 import PulseSurveyView from './components/PulseSurveyView';
 import IdeaProjectView from './components/IdeaProjectView';
+import { ProjectManagementView } from './components/ProjectManagementView';
+import { RoadmapView } from './components/RoadmapView';
+import { ScorecardView } from './components/ScorecardView';
+import { NotesView } from './components/NotesView';
+import { ReportsView } from './components/ReportsView';
 import { cn } from './lib/utils';
 
 type Wallpaper = {
@@ -36,12 +40,20 @@ const BORDER_COLORS = [
 export default function App() {
   const [currentTab, setCurrentTab] = useState('Trang chủ');
   const [cardOpacity, setCardOpacity] = useState(90);
+  const [sidebarOpacity, setSidebarOpacity] = useState(90);
   const [borderColorIndex, setBorderColorIndex] = useState(0);
   const [background, setBackground] = useState<Wallpaper>({
     type: 'gradient',
     value: 'linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)',
     name: 'Chuyển màu sống động (Chuyển động)',
   });
+
+  // User Profile States
+  const [profileName, setProfileName] = useState(() => localStorage.getItem('profile_name') || 'Roberto Canevari');
+  const [profileAvatar, setProfileAvatar] = useState(() => localStorage.getItem('profile_avatar') || 'https://i.pravatar.cc/150?u=roberto');
+  const [profileRole, setProfileRole] = useState(() => localStorage.getItem('profile_role') || 'Quản trị viên');
+  const [profileEmail, setProfileEmail] = useState(() => localStorage.getItem('profile_email') || 'roberto@powerservice.vn');
+  const [profilePhone, setProfilePhone] = useState(() => localStorage.getItem('profile_phone') || '0901234567');
 
   // Border color transitions - changes every 1 minute (60,000 milliseconds)
   useEffect(() => {
@@ -57,33 +69,53 @@ export default function App() {
         return <HomeView onNavigate={setCurrentTab} cardOpacity={cardOpacity} />;
       case 'Bảng điều khiển':
         return <Dashboard cardOpacity={cardOpacity} />;
-      case 'Mục tiêu & Kết quả (OKRs)':
+      case 'Lộ trình':
+        return <RoadmapView cardOpacity={cardOpacity} />;
+      case 'Mục tiêu':
         return <GoalSettingView cardOpacity={cardOpacity} />;
-      case 'Mục tiêu phát triển':
+      case 'Phát triển':
         return <DevGoalSettingView cardOpacity={cardOpacity} />;
-      case 'Chỉ số KPI':
+      case 'Chỉ số':
         return <KpiSettingView cardOpacity={cardOpacity} />;
-      case 'Công việc':
-        return <TaskSettingView cardOpacity={cardOpacity} />;
       case 'Cuộc họp':
         return <MeetingSettingView cardOpacity={cardOpacity} />;
       case 'Hiệu suất':
       case 'Đánh giá':
       case 'Hiệu chuẩn':
         return <PerformanceReviewView cardOpacity={cardOpacity} />;
-      case 'Ghi nhận & Khen thưởng':
+      case 'Khen thưởng':
         return <RewardRecognitionView cardOpacity={cardOpacity} />;
-      case 'Khảo sát ý kiến':
+      case 'Khảo sát':
         return <PulseSurveyView cardOpacity={cardOpacity} />;
-      case 'Danh mục & Dự án':
+      case 'Danh mục':
         return <IdeaProjectView cardOpacity={cardOpacity} />;
+      case 'Dự án':
+        return <ProjectManagementView cardOpacity={cardOpacity} initialTab="projects" />;
+      case 'Bảng điểm':
+        return <ScorecardView cardOpacity={cardOpacity} />;
+      case 'Ghi chú':
+        return <NotesView cardOpacity={cardOpacity} />;
+      case 'Báo cáo':
+        return <ReportsView cardOpacity={cardOpacity} />;
       case 'Cài đặt':
         return (
           <SettingsView
             cardOpacity={cardOpacity}
             setCardOpacity={setCardOpacity}
+            sidebarOpacity={sidebarOpacity}
+            setSidebarOpacity={setSidebarOpacity}
             background={background}
             setBackground={setBackground}
+            profileName={profileName}
+            setProfileName={setProfileName}
+            profileAvatar={profileAvatar}
+            setProfileAvatar={setProfileAvatar}
+            profileRole={profileRole}
+            setProfileRole={setProfileRole}
+            profileEmail={profileEmail}
+            setProfileEmail={setProfileEmail}
+            profilePhone={profilePhone}
+            setProfilePhone={setProfilePhone}
           />
         );
       default:
@@ -157,17 +189,24 @@ export default function App() {
           - Bo cong 4 góc 10px
           - Full chiều rộng & chiều cao (inside padding 15px)
           - Hiệu ứng nổi 3D (shadows)
-          - Có viền màu đổi màu sau mỗi 1 phút
+          - Viền 1px tự động đổi màu sau mỗi 1 phút
       */}
       <div
         style={{
           borderColor: BORDER_COLORS[borderColorIndex],
           boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 0, 0, 0.2)',
         }}
-        className="w-full h-full rounded-[10px] border-[3.5px] flex overflow-hidden transition-all duration-[2000ms] relative z-10 bg-slate-900/10 backdrop-blur-[4px]"
+        className="w-full h-full rounded-[10px] border-[1px] flex overflow-hidden transition-all duration-[2000ms] relative z-10 bg-slate-900/10 backdrop-blur-[4px]"
       >
         {/* Sidebar Menu - left portion of the card */}
-        <Sidebar activeTab={currentTab} setActiveTab={setCurrentTab} cardOpacity={cardOpacity} />
+        <Sidebar 
+          activeTab={currentTab} 
+          setActiveTab={setCurrentTab} 
+          cardOpacity={sidebarOpacity} 
+          profileName={profileName}
+          profileAvatar={profileAvatar}
+          profileRole={profileRole}
+        />
 
         {/* Content area - right portion of the card */}
         <div 

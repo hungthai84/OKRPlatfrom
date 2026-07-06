@@ -67,7 +67,7 @@ export interface KpiItem {
   history: KpiHistoryItem[];
 }
 
-// Initial mockup data aligned with standard Profit.co dashboards
+// Initial mockup data aligned with standard dashboards
 const INITIAL_KPIS: KpiItem[] = [
   {
     id: 'kpi-1',
@@ -392,73 +392,77 @@ export function KpiSettingView({ cardOpacity }: { cardOpacity: number }) {
     }));
   };
 
+  const cardStyle = { 
+    backgroundColor: 'rgba(255, 255, 255, 0.45)',
+    backdropFilter: 'blur(12px)'
+  };
+
   return (
-    <div className="flex-1 flex flex-col h-full bg-[#f8fafc]/90 overflow-hidden">
+    <div className="flex-1 overflow-auto p-6 space-y-6 flex flex-col select-none">
       
-      {/* SECTION HEADER */}
-      <div className="bg-white border-b border-slate-200/80 px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0 shrink-0 select-none">
-        <div className="flex items-center space-x-3">
-          <div className="p-2.5 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-xl text-white shadow-md shadow-cyan-500/20">
-            <Activity size={22} className="animate-spin-slow" />
+      {/* 7. BỐ CỤC TRANG NỘI DUNG: BANNER BO CONG 4 GÓC 10PX */}
+      <div className="bg-gradient-to-r from-cyan-600 via-blue-600 to-indigo-700 rounded-[10px] shadow-lg p-6 text-white relative overflow-hidden transition-all duration-300 shrink-0">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 z-10 relative">
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center animate-pulse">
+              <Activity size={26} className="text-cyan-200" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2">
+                <span>Quản trị Chỉ số Hiệu suất (KPIs)</span>
+              </h2>
+              <p className="text-xs text-cyan-100">
+                Thiết lập và bám sát các chỉ số vận hành cốt lõi (KPI) liên thông, tự động đồng bộ hóa cùng OKRs.
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-lg font-extrabold text-slate-800 tracking-tight flex items-center space-x-1.5">
-              <span>Quản trị Chỉ số Hiệu suất (KPIs)</span>
-              <span className="text-[10px] bg-cyan-500 text-white font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                Profit.co Metrics
-              </span>
-            </h1>
-            <p className="text-xs text-slate-500 font-medium">
-              Thiết lập và bám sát các chỉ số vận hành cốt lõi (KPI) liên thông, tự động đồng bộ hóa cùng OKRs.
-            </p>
+
+          {/* SUB NAVIGATION TABS */}
+          <div className="flex bg-white/10 p-1 rounded-xl border border-white/10 self-start md:self-auto shrink-0">
+            <button
+              onClick={() => setActiveTab('dashboard')}
+              className={cn(
+                "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5",
+                activeTab === 'dashboard' 
+                  ? "bg-white text-cyan-700 shadow-md" 
+                  : "text-cyan-100 hover:text-white"
+              )}
+            >
+              <BarChart2 size={14} />
+              <span>Tổng quan & Chỉ số</span>
+            </button>
+            
+            <button
+              onClick={() => setActiveTab('setup')}
+              className={cn(
+                "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5",
+                activeTab === 'setup' 
+                  ? "bg-white text-cyan-700 shadow-md" 
+                  : "text-cyan-100 hover:text-white"
+              )}
+            >
+              <Plus size={14} />
+              <span>Thiết lập KPI mới</span>
+            </button>
+
+            <button
+              onClick={() => setActiveTab('reports')}
+              className={cn(
+                "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5",
+                activeTab === 'reports' 
+                  ? "bg-white text-cyan-700 shadow-md" 
+                  : "text-cyan-100 hover:text-white"
+              )}
+            >
+              <TrendingUp size={14} />
+              <span>Báo cáo Xu hướng</span>
+            </button>
           </div>
-        </div>
-
-        {/* SUB NAVIGATION TABS */}
-        <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200/50 self-start md:self-auto">
-          <button
-            onClick={() => setActiveTab('dashboard')}
-            className={cn(
-              "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5",
-              activeTab === 'dashboard' 
-                ? "bg-white text-cyan-600 shadow-sm" 
-                : "text-slate-500 hover:text-slate-800"
-            )}
-          >
-            <BarChart2 size={14} />
-            <span>Tổng quan & Chỉ số</span>
-          </button>
-          
-          <button
-            onClick={() => setActiveTab('setup')}
-            className={cn(
-              "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5",
-              activeTab === 'setup' 
-                ? "bg-white text-cyan-600 shadow-sm" 
-                : "text-slate-500 hover:text-slate-800"
-            )}
-          >
-            <Plus size={14} />
-            <span>Thiết lập KPI mới</span>
-          </button>
-
-          <button
-            onClick={() => setActiveTab('reports')}
-            className={cn(
-              "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5",
-              activeTab === 'reports' 
-                ? "bg-white text-cyan-600 shadow-sm" 
-                : "text-slate-500 hover:text-slate-800"
-            )}
-          >
-            <TrendingUp size={14} />
-            <span>Báo cáo Xu hướng</span>
-          </button>
         </div>
       </div>
 
       {/* BODY CONTENT SCROLLER */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+      <div className="flex-1 flex flex-col gap-6 min-h-0">
 
         {/* SUMMARY KPI CARDS PANEL */}
         {activeTab === 'dashboard' && (
@@ -757,11 +761,11 @@ export function KpiSettingView({ cardOpacity }: { cardOpacity: number }) {
                 </div>
               )}
 
-              {/* Profit.co Standard Methodology Banner */}
+              {/* Standard Methodology Banner */}
               <div className="bg-gradient-to-br from-slate-800 to-slate-900 text-white rounded-2xl p-5 space-y-3 shadow-md border border-slate-700">
                 <div className="flex items-center space-x-2">
                   <Sparkles size={16} className="text-amber-400 animate-pulse" />
-                  <span className="text-[11px] font-black tracking-widest text-amber-400 uppercase">Triết lý Profit.co</span>
+                  <span className="text-[11px] font-black tracking-widest text-amber-400 uppercase">Triết lý Quản trị</span>
                 </div>
                 <h4 className="text-xs font-extrabold">Cách kết hợp KPIs cùng OKRs</h4>
                 <p className="text-[11px] text-slate-300 leading-relaxed">
@@ -787,7 +791,7 @@ export function KpiSettingView({ cardOpacity }: { cardOpacity: number }) {
             <div className="border-b border-slate-100 pb-4">
               <h2 className="text-base font-extrabold text-slate-800 flex items-center space-x-2">
                 <Settings size={18} className="text-cyan-500 animate-spin-slow" />
-                <span>Thiết lập Chỉ số KPI chuẩn quốc tế (Profit.co Standard)</span>
+                <span>Thiết lập Chỉ số KPI chuẩn quốc tế</span>
               </h2>
               <p className="text-xs text-slate-400 mt-1">
                 Tạo mới các thước đo sức khỏe vận hành kinh doanh và định hình mục tiêu tối ưu hóa hành trình.
@@ -1102,10 +1106,10 @@ export function KpiSettingView({ cardOpacity }: { cardOpacity: number }) {
             <div className="bg-white rounded-2xl border border-slate-200 p-6 space-y-4">
               <h3 className="text-xs font-extrabold text-slate-800 uppercase tracking-widest flex items-center space-x-2">
                 <Info size={16} className="text-blue-500" />
-                <span>Cẩm nang quản lý KPI theo chuẩn Profit.co</span>
+                <span>Cẩm nang quản lý KPI theo chuẩn Power Service</span>
               </h3>
               <p className="text-xs text-slate-500 leading-relaxed">
-                Profit.co chuẩn hóa KPI qua việc chia nhỏ các cột mốc thực thi, quy định rõ ràng người phụ trách chịu trách nhiệm cho từng kết quả và tạo điều kiện cập nhật số liệu thường xuyên. Đồ thị xu hướng trực tuyến hỗ trợ nhà lãnh đạo đưa ra quyết định dựa trên dữ liệu một cách trực quan, chính xác nhất.
+                Power Service chuẩn hóa KPI qua việc chia nhỏ các cột mốc thực thi, quy định rõ ràng người phụ trách chịu trách nhiệm cho từng kết quả và tạo điều kiện cập nhật số liệu thường xuyên. Đồ thị xu hướng trực tuyến hỗ trợ nhà lãnh đạo đưa ra quyết định dựa trên dữ liệu một cách trực quan, chính xác nhất.
               </p>
             </div>
 

@@ -241,39 +241,42 @@ export function DevGoalSettingView({ cardOpacity }: { cardOpacity: number }) {
   const activeCount = goals.filter(g => g.status === 'Active').length;
   const completedCount = goals.filter(g => g.status === 'Completed').length;
 
-  return (
-    <div className="flex-1 flex flex-col h-full bg-[#f8fafc]/90 overflow-hidden select-none">
-      
-      {/* HEADER BAR */}
-      <div className="bg-white border-b border-slate-200/80 px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0 shrink-0">
-        <div className="flex items-center space-x-3">
-          <div className="p-2.5 bg-gradient-to-tr from-emerald-500 to-teal-600 rounded-xl text-white shadow-md shadow-emerald-500/20">
-            <Flag size={22} />
-          </div>
-          <div>
-            <h1 className="text-lg font-extrabold text-slate-800 tracking-tight flex items-center space-x-1.5">
-              <span>Mục tiêu Phát triển Cá nhân (IDPs)</span>
-              <span className="text-[10px] bg-emerald-500 text-white font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                Profit.co Growth
-              </span>
-            </h1>
-            <p className="text-xs text-slate-500 font-medium">
-              Xây dựng lộ trình đào tạo bản thân, thu hẹp khoảng cách năng lực cốt lõi thông qua các hành động học tập thực tiễn.
-            </p>
-          </div>
-        </div>
+  const cardStyle = { 
+    backgroundColor: 'rgba(255, 255, 255, 0.45)',
+    backdropFilter: 'blur(12px)'
+  };
 
-        <button
-          onClick={() => setShowAddForm(!showAddForm)}
-          className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white text-xs font-bold rounded-xl transition-all shadow-md flex items-center space-x-1.5 cursor-pointer self-start md:self-auto"
-        >
-          <Plus size={14} />
-          <span>Lập mục tiêu phát triển</span>
-        </button>
+  return (
+    <div className="flex-1 overflow-auto p-6 space-y-6 flex flex-col select-none">
+      
+      {/* 7. BỐ CỤC TRANG NỘI DUNG: BANNER BO CONG 4 GÓC 10PX */}
+      <div className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-700 rounded-[10px] shadow-lg p-6 text-white relative overflow-hidden transition-all duration-300 shrink-0">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 z-10 relative">
+          <div className="flex items-center space-x-4">
+            <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center animate-pulse">
+              <Flag size={26} className="text-teal-200" />
+            </div>
+            <div>
+              <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2">
+                <span>Mục tiêu Phát triển Cá nhân (IDPs)</span>
+              </h2>
+              <p className="text-xs text-teal-100">
+                Xây dựng lộ trình đào tạo bản thân, thu hẹp khoảng cách năng lực cốt lõi thông qua các hành động học tập thực tiễn.
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setShowAddForm(!showAddForm)}
+            className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white px-4 py-2.5 rounded-lg text-xs font-bold shadow-md hover:scale-[1.02] active:scale-95 transition-all cursor-pointer shrink-0"
+          >
+            <Plus className="w-4 h-4" /> Lập mục tiêu phát triển
+          </button>
+        </div>
       </div>
 
       {/* CORE CONTENT */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+      <div className="flex-1 flex flex-col gap-6 min-h-0">
 
         {/* METRICS ROW */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">

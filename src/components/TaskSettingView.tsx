@@ -131,7 +131,7 @@ const INITIAL_TASKS: TaskItem[] = [
   }
 ];
 
-export function TaskSettingView({ cardOpacity }: { cardOpacity: number }) {
+export function TaskSettingView({ cardOpacity, hideHeader = false }: { cardOpacity: number; hideHeader?: boolean }) {
   const [tasks, setTasks] = useState<TaskItem[]>(INITIAL_TASKS);
   const [selectedTask, setSelectedTask] = useState<TaskItem | null>(null);
   const [viewMode, setViewMode] = useState<'list' | 'kanban'>('list');
@@ -321,67 +321,122 @@ export function TaskSettingView({ cardOpacity }: { cardOpacity: number }) {
     }
   };
 
+  const cardStyle = { 
+    backgroundColor: 'rgba(255, 255, 255, 0.45)',
+    backdropFilter: 'blur(12px)'
+  };
+
   return (
-    <div className="flex-1 flex flex-col h-full bg-[#f8fafc]/90 overflow-hidden select-none">
+    <div className={cn("flex-1 flex flex-col select-none", hideHeader ? "gap-6 min-h-0" : "overflow-auto p-6 space-y-6")}>
       
-      {/* HEADER SECTION */}
-      <div className="bg-white border-b border-slate-200/80 px-6 py-4 flex flex-col md:flex-row md:items-center md:justify-between space-y-3 md:space-y-0 shrink-0">
-        <div className="flex items-center space-x-3">
-          <div className="p-2.5 bg-gradient-to-tr from-indigo-500 to-blue-600 rounded-xl text-white shadow-md shadow-indigo-500/20">
-            <CheckSquare size={22} />
-          </div>
-          <div>
-            <h1 className="text-lg font-extrabold text-slate-800 tracking-tight flex items-center space-x-1.5">
-              <span>Hệ thống Quản trị Công việc Phát triển</span>
-              <span className="text-[10px] bg-indigo-500 text-white font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
-                Profit.co Tasks
-              </span>
-            </h1>
-            <p className="text-xs text-slate-500 font-medium">
-              Chuyển đổi chiến lược OKRs thành các hành động cụ thể. Đảm bảo 100% công việc bám đuổi các mốc then chốt.
-            </p>
+      {/* 7. BỐ CỤC TRANG NỘI DUNG: BANNER BO CONG 4 GÓC 10PX */}
+      {!hideHeader ? (
+        <div className="bg-gradient-to-r from-violet-600 via-indigo-700 to-slate-900 rounded-[10px] shadow-lg p-6 text-white relative overflow-hidden transition-all duration-300 shrink-0">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 z-10 relative">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center animate-pulse">
+                <CheckSquare size={26} className="text-violet-200" />
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2">
+                  <span>Hệ thống Quản trị Công việc Phát triển</span>
+                </h2>
+                <p className="text-xs text-violet-100">
+                  Chuyển đổi chiến lược OKRs thành các hành động cụ thể. Đảm bảo 100% công việc bám đuổi các mốc then chốt.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-3 shrink-0 flex-wrap gap-2 md:gap-0">
+              {/* View Toggle */}
+              <div className="bg-white/10 p-1 rounded-xl border border-white/10 flex">
+                <button 
+                  onClick={() => setViewMode('list')}
+                  className={cn(
+                    "p-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1",
+                    viewMode === 'list' ? "bg-white text-indigo-700 shadow-md" : "text-violet-100 hover:text-white"
+                  )}
+                  title="Xem dạng Danh sách"
+                >
+                  <List size={14} />
+                  <span className="hidden sm:inline">Danh sách</span>
+                </button>
+                <button 
+                  onClick={() => setViewMode('kanban')}
+                  className={cn(
+                    "p-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1",
+                    viewMode === 'kanban' ? "bg-white text-indigo-700 shadow-md" : "text-violet-100 hover:text-white"
+                  )}
+                  title="Xem dạng bảng Kanban"
+                >
+                  <Layers size={14} />
+                  <span className="hidden sm:inline">Bảng Kanban</span>
+                </button>
+              </div>
+
+              <button
+                onClick={() => setShowAddForm(!showAddForm)}
+                className="flex items-center gap-2 bg-white/10 hover:bg-white/20 border border-white/20 text-white px-4 py-2.5 rounded-lg text-xs font-bold shadow-md hover:scale-[1.02] active:scale-95 transition-all cursor-pointer shrink-0"
+              >
+                <Plus className="w-4 h-4 text-violet-200" /> Giao việc mới
+              </button>
+            </div>
           </div>
         </div>
-
-        <div className="flex items-center space-x-2">
-          {/* View Toggle */}
-          <div className="bg-slate-100 p-1 rounded-xl border border-slate-200/50 flex">
-            <button 
-              onClick={() => setViewMode('list')}
-              className={cn(
-                "p-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1",
-                viewMode === 'list' ? "bg-white text-indigo-600 shadow-sm" : "text-slate-500 hover:text-slate-700"
-              )}
-              title="Xem dạng Danh sách"
-            >
-              <List size={14} />
-              <span className="hidden sm:inline">Danh sách</span>
-            </button>
-            <button 
-              onClick={() => setViewMode('kanban')}
-              className={cn(
-                "p-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1",
-                viewMode === 'kanban' ? "bg-white text-indigo-600 shadow-sm" : "text-slate-500 hover:text-slate-700"
-              )}
-              title="Xem dạng bảng Kanban"
-            >
-              <Layers size={14} />
-              <span className="hidden sm:inline">Bảng Kanban</span>
-            </button>
+      ) : (
+        <div style={cardStyle} className="rounded-[10px] border border-slate-200/60 p-4 shadow-sm flex items-center justify-between shrink-0">
+          <div className="flex items-center space-x-3">
+            <div className="p-2.5 bg-gradient-to-tr from-violet-500 to-indigo-600 rounded-lg text-white">
+              <CheckSquare size={18} />
+            </div>
+            <div>
+              <h3 className="font-extrabold text-sm text-slate-800">Khung Quản lý Công việc</h3>
+              <p className="text-[10px] text-slate-500">Quản lý và bám sát các đầu việc kết nối trực tiếp với dự án.</p>
+            </div>
           </div>
 
-          <button
-            onClick={() => setShowAddForm(!showAddForm)}
-            className="px-4 py-2 bg-gradient-to-r from-indigo-500 to-blue-600 hover:from-indigo-600 hover:to-blue-700 text-white text-xs font-bold rounded-xl transition-all shadow-md shadow-indigo-500/10 flex items-center space-x-1.5 cursor-pointer"
-          >
-            <Plus size={14} />
-            <span>Giao việc mới</span>
-          </button>
+          <div className="flex items-center space-x-3 shrink-0">
+            {/* View Toggle */}
+            <div className="bg-slate-100 p-1 rounded-xl border border-slate-200/50 flex">
+              <button 
+                type="button"
+                onClick={() => setViewMode('list')}
+                className={cn(
+                  "p-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1",
+                  viewMode === 'list' ? "bg-white text-indigo-700 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                )}
+                title="Xem dạng Danh sách"
+              >
+                <List size={14} />
+                <span className="hidden sm:inline">Danh sách</span>
+              </button>
+              <button 
+                type="button"
+                onClick={() => setViewMode('kanban')}
+                className={cn(
+                  "p-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1",
+                  viewMode === 'kanban' ? "bg-white text-indigo-700 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                )}
+                title="Xem dạng bảng Kanban"
+              >
+                <Layers size={14} />
+                <span className="hidden sm:inline">Bảng Kanban</span>
+              </button>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setShowAddForm(!showAddForm)}
+              className="flex items-center gap-1.5 bg-indigo-600 hover:bg-indigo-700 text-white px-3.5 py-2 rounded-lg text-xs font-bold shadow-md hover:scale-[1.02] active:scale-95 transition-all cursor-pointer shrink-0"
+            >
+              <Plus className="w-4 h-4 text-indigo-100" /> Giao việc mới
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* CORE VIEW SCROLLER */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6">
+      <div className="flex-1 flex flex-col gap-6 min-h-0">
 
         {/* TOP STATUS OVERVIEW */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

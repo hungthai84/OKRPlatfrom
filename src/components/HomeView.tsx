@@ -30,10 +30,12 @@ export function HomeView({ onNavigate, cardOpacity }: HomeViewProps) {
     backdropFilter: 'blur(12px)'
   };
 
+  const profileName = localStorage.getItem('profile_name') || 'Roberto';
+
   const quickStats = [
-    { label: "OKRs cá nhân hoạt động", value: "8", icon: Target, color: "text-blue-500", bg: "bg-blue-50", tab: "Mục tiêu & Kết quả (OKRs)" },
-    { label: "Chỉ số KPI vận hành", value: "5 chỉ số", icon: Activity, color: "text-cyan-500", bg: "bg-cyan-50", tab: "Chỉ số KPI" },
-    { label: "Công việc cần làm", value: "14", icon: CheckSquare, color: "text-emerald-500", bg: "bg-emerald-50", tab: "Công việc" },
+    { label: "OKRs cá nhân hoạt động", value: "8", icon: Target, color: "text-blue-500", bg: "bg-blue-50", tab: "Mục tiêu" },
+    { label: "Chỉ số KPI vận hành", value: "5 chỉ số", icon: Activity, color: "text-cyan-500", bg: "bg-cyan-50", tab: "Chỉ số" },
+    { label: "Công việc cần làm", value: "14", icon: CheckSquare, color: "text-emerald-500", bg: "bg-emerald-50", tab: "Dự án" },
     { label: "Cuộc họp kế tiếp", value: "14:00", icon: Calendar, color: "text-purple-500", bg: "bg-purple-50", tab: "Cuộc họp" }
   ];
 
@@ -57,7 +59,7 @@ export function HomeView({ onNavigate, cardOpacity }: HomeViewProps) {
             </div>
             <div>
               <h2 className="text-2xl font-bold tracking-tight">Trang chủ quản trị</h2>
-              <p className="text-xs text-blue-200">Chào mừng bạn trở lại, Roberto! Toàn hệ thống đang vận hành hoàn hảo.</p>
+              <p className="text-xs text-blue-200">Chào mừng bạn trở lại, {profileName}! Toàn hệ thống đang vận hành hoàn hảo.</p>
             </div>
           </div>
 
@@ -128,7 +130,7 @@ export function HomeView({ onNavigate, cardOpacity }: HomeViewProps) {
             </button>
           </div>
           <p className="text-xs text-blue-800 leading-relaxed">
-            Hệ thống quản trị hiệu suất Profit.co giúp bạn căn chỉnh các mục tiêu dài hạn (Objectives) và các kết quả cốt lõi (Key Results) của doanh nghiệp. Bạn có thể cập nhật kết quả hàng tuần, đánh giá hiệu suất của cấp dưới tại mục <strong>Hiệu suất</strong> và tùy biến giao diện trực quan trong phần <strong>Cài đặt</strong>.
+            Hệ thống quản trị hiệu suất Power Service giúp bạn căn chỉnh các mục tiêu dài hạn (Objectives) và các kết quả cốt lõi (Key Results) của doanh nghiệp. Bạn có thể cập nhật kết quả hàng tuần, đánh giá hiệu suất của cấp dưới tại mục <strong>Hiệu suất</strong> và tùy biến giao diện trực quan trong phần <strong>Cài đặt</strong>.
           </p>
         </div>
       )}
