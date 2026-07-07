@@ -151,14 +151,22 @@ export function ReportsView({ cardOpacity }: { cardOpacity: number }) {
         </div>
 
         {/* SUB NAVIGATION TABS */}
-        <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+        
+      </div>
+
+      {/* Sub-navigation Tabs */}
+      <div className="flex border-b border-gray-200 dark:border-slate-800 mb-2 bg-white dark:bg-slate-900 rounded-xl p-1.5 shadow-sm border shrink-0">
+        <div className="flex flex-wrap items-center justify-between gap-4 w-full px-2 py-1">
+          
           <div className="flex space-x-6 text-sm font-semibold">
-            <button className="pb-1 border-b-2 border-orange-500 text-white font-bold cursor-pointer transition-all">
+            <button className="pb-1 border-b-2 border-orange-500 text-slate-800 dark:text-slate-200 font-bold cursor-pointer transition-all">
               Báo cáo hiệu suất định kỳ ({filteredReports.length})
             </button>
           </div>
+        
         </div>
       </div>
+
 
       {/* 2. STATS & ANALYTIC CHART SECTION */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 shrink-0">

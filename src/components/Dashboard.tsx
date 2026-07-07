@@ -46,7 +46,7 @@ export function Dashboard({ cardOpacity }: DashboardProps) {
     <div className="flex-1 overflow-auto p-6 space-y-6 flex flex-col">
       
       {/* 7. BỐ CỤC TRANG NỘI DUNG: BANNER BO CONG 4 GÓC 10PX */}
-      <div className="bg-gradient-to-r from-blue-700 via-indigo-800 to-slate-900 rounded-[10px] shadow-lg p-6 text-white relative overflow-hidden transition-all duration-300">
+      <div className="bg-gradient-to-r from-blue-700 via-indigo-800 to-slate-900 rounded-[10px] shadow-lg p-6 text-white relative overflow-hidden transition-all duration-300 shrink-0">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 z-10 relative">
           
           {/* Chứa Icon đại diện cho tiêu đề có hiệu ứng động & tiêu đề chính dưới có tiêu đề phụ */}
@@ -80,12 +80,18 @@ export function Dashboard({ cardOpacity }: DashboardProps) {
         </div>
 
         {/* Banner chứa các nút tính năng như filter, nút tính năng */}
-        <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+        
+      </div>
+
+      {/* Sub-navigation Tabs */}
+      <div className="flex border-b border-gray-200 dark:border-slate-800 mb-2 bg-white dark:bg-slate-900 rounded-xl p-1.5 shadow-sm border shrink-0">
+        <div className="flex flex-wrap items-center justify-between gap-4 w-full px-2 py-1">
+          
           <div className="flex space-x-6 text-sm font-semibold">
-            <div className="pb-1 border-b-2 border-orange-500 text-white cursor-pointer flex items-center space-x-1">
+            <div className="pb-1 border-b-2 border-orange-500 text-slate-800 dark:text-slate-200 cursor-pointer flex items-center space-x-1">
               <span>Đánh giá mục tiêu</span>
             </div>
-            <div className="pb-1 text-gray-400 hover:text-white cursor-pointer transition-colors">
+            <div className="pb-1 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200 cursor-pointer transition-colors">
               <span>Mục tiêu liên kết Kết quả</span>
             </div>
           </div>
@@ -98,18 +104,20 @@ export function Dashboard({ cardOpacity }: DashboardProps) {
               <select
                 value={filterStatus || ''}
                 onChange={(e) => setFilterStatus(e.target.value || null)}
-                className="appearance-none bg-white/10 border border-white/20 rounded-lg px-3 py-1.5 pr-8 cursor-pointer hover:bg-white/15 text-white font-semibold text-xs focus:outline-none focus:ring-1 focus:ring-orange-400"
+                className="appearance-none bg-slate-100 dark:bg-slate-800 border border-white/20 rounded-lg px-3 py-1.5 pr-8 cursor-pointer hover:bg-slate-200 dark:bg-slate-700 text-slate-800 dark:text-slate-200 font-semibold text-xs focus:outline-none focus:ring-1 focus:ring-orange-400"
               >
                 <option value="" className="text-gray-800">Tất cả Trạng thái</option>
                 <option value="On Track" className="text-gray-800">Đúng tiến độ</option>
                 <option value="At Risk" className="text-gray-800">Có rủi ro</option>
                 <option value="Off Track" className="text-gray-800">Chậm trễ</option>
               </select>
-              <ChevronDown size={12} className="text-white absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <ChevronDown size={12} className="text-slate-800 dark:text-slate-200 absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
           </div>
+        
         </div>
       </div>
+
 
       {/* Guide Box */}
       {showGuide && (

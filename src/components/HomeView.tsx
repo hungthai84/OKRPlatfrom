@@ -81,36 +81,21 @@ export function HomeView({ onNavigate, cardOpacity }: HomeViewProps) {
             </button>
           </div>
         </div>
+      </div>
 
-        {/* Banner chứa các nút tính năng như filter, nút tính năng */}
-        <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center space-x-2 text-xs">
-            <span className="text-blue-200">Phân loại dữ liệu:</span>
-            {['Tất cả', 'Cá nhân', 'Nhóm', 'Công ty'].map((type) => (
-              <button
-                key={type}
-                onClick={() => setFilterType(type)}
-                className={`px-3 py-1 rounded-full font-semibold transition-all ${
-                  filterType === type 
-                    ? 'bg-orange-500 text-white' 
-                    : 'bg-white/10 text-gray-300 hover:bg-white/15'
-                }`}
-              >
-                {type}
-              </button>
-            ))}
-          </div>
-
-          <div className="flex items-center space-x-2">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Tìm kiếm nhanh..."
-                className="bg-white/10 border border-white/15 rounded-lg pl-8 pr-4 py-1.5 text-xs text-white placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-orange-400"
-              />
-              <Search size={12} className="text-gray-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
-            </div>
-          </div>
+      {/* Sub-navigation Tabs */}
+      <div className="flex border-b border-gray-200 dark:border-slate-800 mb-2 bg-white dark:bg-slate-900 rounded-xl p-1.5 shadow-sm border shrink-0">
+        <div className="flex flex-wrap items-center space-x-2 px-2 py-1">
+          <span className="text-slate-500 font-semibold text-xs mr-2">Phân loại dữ liệu:</span>
+          {['Tất cả', 'Cá nhân', 'Nhóm', 'Công ty'].map((type) => (
+            <button
+              key={type}
+              onClick={() => setFilterType(type)}
+              className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg text-xs font-bold transition-all ${filterType === type ? 'bg-indigo-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/50'}`}
+            >
+              {type}
+            </button>
+          ))}
         </div>
       </div>
 

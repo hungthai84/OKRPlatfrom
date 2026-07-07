@@ -206,7 +206,7 @@ export function PlaceholderView({ tabName, cardOpacity }: PlaceholderViewProps) 
     <div className="flex-1 overflow-auto p-6 space-y-6 flex flex-col select-none">
       
       {/* 7. BỐ CỤC TRANG NỘI DUNG: BANNER BO CONG 4 GÓC 10PX */}
-      <div className="bg-gradient-to-r from-blue-700 via-indigo-800 to-slate-900 rounded-[10px] shadow-lg p-6 text-white relative overflow-hidden transition-all duration-300">
+      <div className="bg-gradient-to-r from-blue-700 via-indigo-800 to-slate-900 rounded-[10px] shadow-lg p-6 text-white relative overflow-hidden transition-all duration-300 shrink-0">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 z-10 relative">
           
           <div className="flex items-center space-x-4">
@@ -236,17 +236,25 @@ export function PlaceholderView({ tabName, cardOpacity }: PlaceholderViewProps) 
           </div>
         </div>
 
-        <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+        
+      </div>
+
+      {/* Sub-navigation Tabs */}
+      <div className="flex border-b border-gray-200 dark:border-slate-800 mb-2 bg-white dark:bg-slate-900 rounded-xl p-1.5 shadow-sm border shrink-0">
+        <div className="flex flex-wrap items-center justify-between gap-4 w-full px-2 py-1">
+          
           <div className="flex space-x-6 text-sm font-semibold">
-            <div className="pb-1 border-b-2 border-orange-500 text-white cursor-pointer">
+            <div className="pb-1 border-b-2 border-orange-500 text-slate-800 dark:text-slate-200 cursor-pointer">
               <span>Tổng quan số liệu</span>
             </div>
-            <div className="pb-1 text-gray-400 hover:text-white cursor-pointer transition-colors">
+            <div className="pb-1 text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200 cursor-pointer transition-colors">
               <span>Cấu hình quy chuẩn</span>
             </div>
           </div>
+        
         </div>
       </div>
+
 
       {showGuide && (
         <div className="p-5 rounded-[10px] border border-blue-200 bg-blue-50/95 shadow-md space-y-3 animate-in slide-in-from-top-4 duration-300">

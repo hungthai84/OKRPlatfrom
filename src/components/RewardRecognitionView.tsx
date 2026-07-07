@@ -224,7 +224,7 @@ export default function RewardRecognitionView({ cardOpacity }: RewardRecognition
     <div className="flex-1 overflow-auto p-6 space-y-6 flex flex-col select-none">
       
       {/* HEADER BANNER */}
-      <div className="bg-gradient-to-r from-blue-700 via-indigo-800 to-slate-900 rounded-[10px] shadow-lg p-6 text-white relative overflow-hidden transition-all duration-300">
+      <div className="bg-gradient-to-r from-blue-700 via-indigo-800 to-slate-900 rounded-[10px] shadow-lg p-6 text-white relative overflow-hidden transition-all duration-300 shrink-0">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 z-10 relative">
           <div className="flex items-center space-x-4">
             <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center animate-pulse">
@@ -250,12 +250,18 @@ export default function RewardRecognitionView({ cardOpacity }: RewardRecognition
         </div>
 
         {/* SUB NAVIGATION TABS */}
-        <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+        
+      </div>
+
+      {/* Sub-navigation Tabs */}
+      <div className="flex border-b border-gray-200 dark:border-slate-800 mb-2 bg-white dark:bg-slate-900 rounded-xl p-1.5 shadow-sm border shrink-0">
+        <div className="flex flex-wrap items-center justify-between gap-4 w-full px-2 py-1">
+          
           <div className="flex space-x-6 text-sm font-semibold">
             <button 
               onClick={() => setActiveSubTab('wall')}
               className={`pb-1 border-b-2 cursor-pointer transition-all ${
-                activeSubTab === 'wall' ? 'border-orange-500 text-white font-bold' : 'border-transparent text-gray-400 hover:text-white'
+                activeSubTab === 'wall' ? 'border-orange-500 text-slate-800 dark:text-slate-200 font-bold' : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200'
               }`}
             >
               Bảng tin Vinh danh
@@ -263,7 +269,7 @@ export default function RewardRecognitionView({ cardOpacity }: RewardRecognition
             <button 
               onClick={() => setActiveSubTab('leaderboard')}
               className={`pb-1 border-b-2 cursor-pointer transition-all ${
-                activeSubTab === 'leaderboard' ? 'border-orange-500 text-white font-bold' : 'border-transparent text-gray-400 hover:text-white'
+                activeSubTab === 'leaderboard' ? 'border-orange-500 text-slate-800 dark:text-slate-200 font-bold' : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200'
               }`}
             >
               Bảng xếp hạng tháng
@@ -271,14 +277,16 @@ export default function RewardRecognitionView({ cardOpacity }: RewardRecognition
             <button 
               onClick={() => setActiveSubTab('rewards')}
               className={`pb-1 border-b-2 cursor-pointer transition-all ${
-                activeSubTab === 'rewards' ? 'border-orange-500 text-white font-bold' : 'border-transparent text-gray-400 hover:text-white'
+                activeSubTab === 'rewards' ? 'border-orange-500 text-slate-800 dark:text-slate-200 font-bold' : 'border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200'
               }`}
             >
               Cửa hàng đổi quà
             </button>
           </div>
+        
         </div>
       </div>
+
 
       {/* RENDER ACTIVE TAB */}
       <div className="flex-1 flex flex-col space-y-6">

@@ -330,7 +330,7 @@ export function TaskSettingView({ cardOpacity, hideHeader = false }: { cardOpaci
     <div className={cn("flex-1 flex flex-col select-none", hideHeader ? "gap-6 min-h-0" : "overflow-auto p-6 space-y-6")}>
       
       {/* 7. BỐ CỤC TRANG NỘI DUNG: BANNER BO CONG 4 GÓC 10PX */}
-      {!hideHeader ? (
+      {!hideHeader ? (<React.Fragment>
         <div className="bg-gradient-to-r from-violet-600 via-indigo-700 to-slate-900 rounded-[10px] shadow-lg p-6 text-white relative overflow-hidden transition-all duration-300 shrink-0">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 z-10 relative">
             <div className="flex items-center space-x-4">
@@ -349,30 +349,7 @@ export function TaskSettingView({ cardOpacity, hideHeader = false }: { cardOpaci
 
             <div className="flex items-center space-x-3 shrink-0 flex-wrap gap-2 md:gap-0">
               {/* View Toggle */}
-              <div className="bg-white/10 p-1 rounded-xl border border-white/10 flex">
-                <button 
-                  onClick={() => setViewMode('list')}
-                  className={cn(
-                    "p-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1",
-                    viewMode === 'list' ? "bg-white text-indigo-700 shadow-md" : "text-violet-100 hover:text-white"
-                  )}
-                  title="Xem dạng Danh sách"
-                >
-                  <List size={14} />
-                  <span className="hidden sm:inline">Danh sách</span>
-                </button>
-                <button 
-                  onClick={() => setViewMode('kanban')}
-                  className={cn(
-                    "p-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1",
-                    viewMode === 'kanban' ? "bg-white text-indigo-700 shadow-md" : "text-violet-100 hover:text-white"
-                  )}
-                  title="Xem dạng bảng Kanban"
-                >
-                  <Layers size={14} />
-                  <span className="hidden sm:inline">Bảng Kanban</span>
-                </button>
-              </div>
+              
 
               <button
                 onClick={() => setShowAddForm(!showAddForm)}
@@ -383,6 +360,38 @@ export function TaskSettingView({ cardOpacity, hideHeader = false }: { cardOpaci
             </div>
           </div>
         </div>
+
+      {/* Sub-navigation Tabs */}
+      <div className="flex border-b border-gray-200 dark:border-slate-800 mb-2 bg-white dark:bg-slate-900 rounded-xl p-1.5 shadow-sm border shrink-0">
+        <div className="bg-slate-100 p-1 rounded-xl border border-slate-200/50 flex">
+          
+                <button 
+                  onClick={() => setViewMode('list')}
+                  className={cn(
+                    "p-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1",
+                    viewMode === 'list' ? "bg-white text-indigo-700 shadow-md" : "text-slate-500 hover:text-slate-700 hover:text-indigo-700 shadow-sm"
+                  )}
+                  title="Xem dạng Danh sách"
+                >
+                  <List size={14} />
+                  <span className="hidden sm:inline">Danh sách</span>
+                </button>
+                <button 
+                  onClick={() => setViewMode('kanban')}
+                  className={cn(
+                    "p-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1",
+                    viewMode === 'kanban' ? "bg-white text-indigo-700 shadow-md" : "text-slate-500 hover:text-slate-700 hover:text-indigo-700 shadow-sm"
+                  )}
+                  title="Xem dạng bảng Kanban"
+                >
+                  <Layers size={14} />
+                  <span className="hidden sm:inline">Bảng Kanban</span>
+                </button>
+              
+        </div>
+      </div>
+
+      </React.Fragment>
       ) : (
         <div style={cardStyle} className="rounded-[10px] border border-slate-200/60 p-4 shadow-sm flex items-center justify-between shrink-0">
           <div className="flex items-center space-x-3">
@@ -898,7 +907,7 @@ export function TaskSettingView({ cardOpacity, hideHeader = false }: { cardOpaci
                   </div>
 
                 </div>
-              ) : (
+      ) : (
                 <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 text-center space-y-3">
                   <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center mx-auto text-indigo-500 shadow-sm border border-slate-100">
                     <UserCheck size={16} />

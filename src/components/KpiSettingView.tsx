@@ -418,14 +418,21 @@ export function KpiSettingView({ cardOpacity }: { cardOpacity: number }) {
           </div>
 
           {/* SUB NAVIGATION TABS */}
-          <div className="flex bg-white/10 p-1 rounded-xl border border-white/10 self-start md:self-auto shrink-0">
+          
+        </div>
+      </div>
+
+      {/* Sub-navigation Tabs */}
+      <div className="flex border-b border-gray-200 dark:border-slate-800 mb-2 bg-white dark:bg-slate-900 rounded-xl p-1.5 shadow-sm border shrink-0">
+        <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200/50 self-start md:self-auto shrink-0">
+          
             <button
               onClick={() => setActiveTab('dashboard')}
               className={cn(
                 "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5",
                 activeTab === 'dashboard' 
                   ? "bg-white text-cyan-700 shadow-md" 
-                  : "text-cyan-100 hover:text-white"
+                  : "text-cyan-100 hover:text-indigo-700 shadow-sm"
               )}
             >
               <BarChart2 size={14} />
@@ -438,7 +445,7 @@ export function KpiSettingView({ cardOpacity }: { cardOpacity: number }) {
                 "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5",
                 activeTab === 'setup' 
                   ? "bg-white text-cyan-700 shadow-md" 
-                  : "text-cyan-100 hover:text-white"
+                  : "text-cyan-100 hover:text-indigo-700 shadow-sm"
               )}
             >
               <Plus size={14} />
@@ -451,15 +458,16 @@ export function KpiSettingView({ cardOpacity }: { cardOpacity: number }) {
                 "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5",
                 activeTab === 'reports' 
                   ? "bg-white text-cyan-700 shadow-md" 
-                  : "text-cyan-100 hover:text-white"
+                  : "text-cyan-100 hover:text-indigo-700 shadow-sm"
               )}
             >
               <TrendingUp size={14} />
               <span>Báo cáo Xu hướng</span>
             </button>
-          </div>
+          
         </div>
       </div>
+
 
       {/* BODY CONTENT SCROLLER */}
       <div className="flex-1 flex flex-col gap-6 min-h-0">

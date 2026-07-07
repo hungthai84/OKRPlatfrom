@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { cn } from '../lib/utils';
+import { useApp } from '../context/AppContext';
 import {
   Home,
   Target,
@@ -73,17 +74,18 @@ const MENU_GROUPS = [
 type SidebarProps = {
   activeTab: string;
   setActiveTab: (tab: string) => void;
-  cardOpacity: number;
   profileName: string;
   profileAvatar: string;
   profileRole: string;
 };
 
-export function Sidebar({ activeTab, setActiveTab, cardOpacity, profileName, profileAvatar, profileRole }: SidebarProps) {
-  const [collapsed, setCollapsed] = useState(true); // Default to collapsed
+export function Sidebar({ activeTab, setActiveTab, profileName, profileAvatar, profileRole }: SidebarProps) {
+  const { sidebarOpacity, playTactileSound } = useApp();
+  const [collapsed, setCollapsed] = useState(true);
   const [activePopup, setActivePopup] = useState<string | null>(null);
 
   const handleSearchClick = () => {
+    playTactileSound();
     const query = prompt('Nhập nội dung cần tìm kiếm nhanh trên Power Service:');
     if (query) {
       alert(`Đang tìm kiếm kết quả cho: "${query}"...\nKhông tìm thấy mục tiêu hay công việc nào trùng khớp.`);
@@ -91,12 +93,18 @@ export function Sidebar({ activeTab, setActiveTab, cardOpacity, profileName, pro
   };
 
   const handleItemClick = (item: any) => {
+    playTactileSound();
     if (item.subItems) {
       setActivePopup(activePopup === item.name ? null : item.name);
     } else {
       setActiveTab(item.name);
       setActivePopup(null);
     }
+  };
+
+  const toggleCollapse = () => {
+    playTactileSound();
+    setCollapsed(!collapsed);
   };
 
   const isParentActive = (item: any) => {
@@ -109,12 +117,12 @@ export function Sidebar({ activeTab, setActiveTab, cardOpacity, profileName, pro
   return (
     <div
       style={{
-        backgroundColor: `rgba(255, 255, 255, ${cardOpacity / 100})`,
-        backdropFilter: 'blur(8px)',
+        backgroundColor: `rgba(255, 255, 255, ${sidebarOpacity / 100})`,
+        backdropFilter: 'blur(16px)',
       }}
       className={cn(
-        'flex flex-col text-slate-800 border-r border-slate-200/60 transition-all duration-300 relative h-full select-none shadow-2xl shrink-0 z-30',
-        collapsed ? 'w-20' : 'w-64'
+        'flex flex-col text-slate-800 border-r border-white/10 transition-all duration-300 relative h-full select-none shadow-2xl shrink-0 z-30',
+        collapsed ? 'w-20' : 'w-72'
       )}
     >
       {/* PART 1: TOP (Logo & Search) */}
@@ -135,7 +143,7 @@ export function Sidebar({ activeTab, setActiveTab, cardOpacity, profileName, pro
               />
             </div>
             {!collapsed && (
-              <span className="ml-1.5 font-bold text-lg tracking-wider text-slate-800 truncate">
+              <span className="ml-1.5 font-display font-bold text-lg tracking-wider text-slate-800 truncate">
                 Power Service
               </span>
             )}
@@ -155,32 +163,32 @@ export function Sidebar({ activeTab, setActiveTab, cardOpacity, profileName, pro
             <Search size={20} className="text-slate-400 shrink-0" />
           </div>
           {!collapsed && (
-            <span className="ml-1.5 truncate text-sm font-bold text-slate-500">Tìm kiếm</span>
+            <span className="ml-1.5 truncate text-sidebar-menu text-slate-500">Tìm kiếm</span>
           )}
         </button>
       </div>
 
       {/* Toggle collapse button - round arrow in the middle */}
       <button
-        onClick={() => setCollapsed(!collapsed)}
-        className="absolute -right-3.5 top-1/2 -translate-y-1/2 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full p-1.5 border border-white/20 text-white hover:scale-110 shadow-lg cursor-pointer z-40 transition-all"
+        onClick={toggleCollapse}
+        className="absolute -right-3.5 top-1/2 -translate-y-1/2 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-full p-1.5 border border-white/20 text-white hover:scale-110 shadow-lg cursor-pointer z-40 transition-all"
         title={collapsed ? "Mở rộng" : "Thu gọn"}
       >
         {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
       </button>
 
-      {/* PART 2: CENTER (Menu Items always aligned perfectly horizontally & vertically in the column) */}
+      {/* PART 2: CENTER (Menu Items) */}
       <div className="flex-1 flex flex-col justify-start py-4 overflow-y-auto scrollbar-none">
         <div className="space-y-6 w-full">
           {MENU_GROUPS.map((group, groupIdx) => (
             <div key={groupIdx} className="space-y-1 w-full">
-              {/* Category Header (only shown when expanded) */}
+              {/* Category Header */}
               {!collapsed && (
-                <div className="px-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 select-none">
+                <div className="px-5 text-badge font-bold text-slate-400 uppercase tracking-widest mb-1 select-none">
                   {group.title}
                 </div>
               )}
-              {/* Theme Separator Divider (only shown when collapsed) */}
+              {/* Theme Separator Divider */}
               {collapsed && groupIdx > 0 && (
                 <div className="mx-4 border-t border-slate-200/60 my-2" />
               )}
@@ -195,24 +203,23 @@ export function Sidebar({ activeTab, setActiveTab, cardOpacity, profileName, pro
                       <button
                         onClick={() => handleItemClick(item)}
                         className={cn(
-                          'flex items-center rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer h-12',
+                          'flex items-center rounded-lg transition-all duration-200 cursor-pointer h-12',
                           collapsed ? 'justify-center w-12' : 'justify-start w-full',
                           active 
-                            ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600' 
+                            ? 'bg-indigo-50 text-indigo-600 border-l-4 border-indigo-600' 
                             : 'text-slate-600 hover:bg-slate-900/5 hover:text-slate-900'
                         )}
                         title={collapsed ? item.name : undefined}
                       >
                         <div className="w-12 h-12 flex items-center justify-center shrink-0">
-                          <Icon size={20} className={cn("shrink-0", active ? "text-blue-600 scale-110" : "text-slate-400 group-hover/item:text-slate-600")} />
+                          <Icon size={20} className={cn("shrink-0", active ? "text-indigo-600 scale-110" : "text-slate-400 group-hover/item:text-slate-600")} />
                         </div>
                         {!collapsed && (
-                          <span className="ml-1.5 truncate text-sm font-bold">{item.name}</span>
+                          <span className="ml-1.5 truncate text-sidebar-menu font-bold">{item.name}</span>
                         )}
                         
-                        {/* Small badge for Trang chủ if needed */}
                         {!collapsed && item.name === 'Trang chủ' && (
-                          <span className="ml-auto mr-2 bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full animate-pulse">
+                          <span className="ml-auto mr-2 bg-red-500 text-badge text-white font-bold px-1.5 py-0.5 rounded-full animate-pulse">
                             Mới
                           </span>
                         )}
@@ -228,13 +235,13 @@ export function Sidebar({ activeTab, setActiveTab, cardOpacity, profileName, pro
                         )}
                       </button>
 
-                      {/* Sub-menu Popup - Highest Z-Index layer, centered relative to the parent icon */}
+                      {/* Sub-menu Popup */}
                       {activePopup === item.name && item.subItems && (
                         <div
                           className="absolute left-[calc(100%+12px)] top-1/2 -translate-y-1/2 z-50 bg-white border border-slate-200/80 rounded-xl shadow-2xl p-3 min-w-[220px] text-left animate-in fade-in slide-in-from-left-2 duration-150"
                           onMouseLeave={() => setActivePopup(null)}
                         >
-                          <div className="text-xs font-bold text-orange-600 mb-2 uppercase tracking-wider border-b border-slate-100 pb-1.5">
+                          <div className="text-badge font-bold text-indigo-600 mb-2 uppercase tracking-wider border-b border-slate-100 pb-1.5">
                             {item.name}
                           </div>
                           <ul className="space-y-1">
@@ -245,13 +252,14 @@ export function Sidebar({ activeTab, setActiveTab, cardOpacity, profileName, pro
                                   <button
                                     onClick={(e) => {
                                       e.stopPropagation();
+                                      playTactileSound();
                                       setActiveTab(sub.name);
                                       setActivePopup(null);
                                     }}
                                     className={cn(
-                                      'w-full text-left px-3 py-2 text-xs rounded-lg transition-colors font-bold',
+                                      'w-full text-left px-3 py-2 rounded-lg transition-colors font-bold text-sm',
                                       isSubActive
-                                        ? 'bg-blue-50 text-blue-600 border-l-4 border-orange-500'
+                                        ? 'bg-indigo-50 text-indigo-600 border-l-4 border-indigo-500'
                                         : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                                     )}
                                   >
@@ -277,28 +285,30 @@ export function Sidebar({ activeTab, setActiveTab, cardOpacity, profileName, pro
         {/* Settings button */}
         <button
           onClick={() => {
+            playTactileSound();
             setActiveTab('Cài đặt');
             setActivePopup(null);
           }}
           className={cn(
-            'flex items-center rounded-lg text-sm font-semibold transition-all duration-200 cursor-pointer h-12',
+            'flex items-center rounded-lg transition-all duration-200 cursor-pointer h-12',
             collapsed ? 'justify-center w-12' : 'justify-start w-full',
             activeTab === 'Cài đặt' 
-              ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600' 
+              ? 'bg-indigo-50 text-indigo-600 border-l-4 border-indigo-600' 
               : 'text-slate-600 hover:bg-slate-900/5 hover:text-slate-900'
           )}
           title={collapsed ? "Cài đặt hệ thống" : undefined}
         >
           <div className="w-12 h-12 flex items-center justify-center shrink-0">
-            <Settings size={20} className={activeTab === 'Cài đặt' ? "text-blue-600 animate-spin-slow" : "text-slate-400"} />
+            <Settings size={20} className={activeTab === 'Cài đặt' ? "text-indigo-600 animate-spin-slow" : "text-slate-400"} />
           </div>
-          {!collapsed && <span className="ml-1.5 truncate">Cài đặt hệ thống</span>}
+          {!collapsed && <span className="ml-1.5 truncate text-sidebar-menu font-bold">Cài đặt hệ thống</span>}
         </button>
 
         {/* User Profile */}
         <button
           type="button"
           onClick={() => {
+            playTactileSound();
             setActiveTab('Cài đặt');
             setActivePopup(null);
           }}
@@ -312,13 +322,13 @@ export function Sidebar({ activeTab, setActiveTab, cardOpacity, profileName, pro
             <img
               src={profileAvatar}
               alt={profileName}
-              className="w-8 h-8 rounded-full border border-orange-500/50 object-cover"
+              className="w-8 h-8 rounded-full border border-indigo-500/50 object-cover"
             />
           </div>
           {!collapsed && (
             <div className="text-left truncate min-w-0 ml-1.5">
-              <p className="text-xs font-bold text-slate-800 truncate leading-none">{profileName}</p>
-              <p className="text-[10px] text-slate-500 truncate mt-1 leading-none">{profileRole}</p>
+              <p className="text-sidebar-menu font-bold text-slate-800 truncate leading-none">{profileName}</p>
+              <p className="text-badge text-slate-500 truncate mt-1 leading-none">{profileRole}</p>
             </div>
           )}
         </button>

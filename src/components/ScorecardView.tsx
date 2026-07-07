@@ -219,13 +219,19 @@ export function ScorecardView({ cardOpacity }: { cardOpacity: number }) {
         </div>
 
         {/* SUB NAVIGATION TABS */}
-        <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+        
+      </div>
+
+      {/* Sub-navigation Tabs */}
+      <div className="flex border-b border-gray-200 dark:border-slate-800 mb-2 bg-white dark:bg-slate-900 rounded-xl p-1.5 shadow-sm border shrink-0">
+        <div className="flex flex-wrap items-center justify-between gap-4 w-full px-2 py-1">
+          
           <div className="flex space-x-6 text-sm font-semibold">
             <button 
               onClick={() => setActiveTab('employees')}
               className={cn(
                 "pb-1 border-b-2 cursor-pointer transition-all",
-                activeTab === 'employees' ? "border-orange-500 text-white font-bold" : "border-transparent text-gray-400 hover:text-white"
+                activeTab === 'employees' ? "border-orange-500 text-slate-800 dark:text-slate-200 font-bold" : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200"
               )}
             >
               Bảng điểm cá nhân ({scorecards.length})
@@ -234,14 +240,16 @@ export function ScorecardView({ cardOpacity }: { cardOpacity: number }) {
               onClick={() => setActiveTab('departments')}
               className={cn(
                 "pb-1 border-b-2 cursor-pointer transition-all",
-                activeTab === 'departments' ? "border-orange-500 text-white font-bold" : "border-transparent text-gray-400 hover:text-white"
+                activeTab === 'departments' ? "border-orange-500 text-slate-800 dark:text-slate-200 font-bold" : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200"
               )}
             >
               Bảng điểm theo phòng ban
             </button>
           </div>
+        
         </div>
       </div>
+
 
       {/* 2. STATS STRIP CARD LAYOUT */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-3 shrink-0">

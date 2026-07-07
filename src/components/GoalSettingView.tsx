@@ -428,14 +428,21 @@ export function GoalSettingView({ cardOpacity }: { cardOpacity: number }) {
           </div>
 
           {/* SUB NAVIGATION TABS */}
-          <div className="flex bg-white/10 p-1 rounded-xl border border-white/10 self-start md:self-auto shrink-0">
+          
+        </div>
+      </div>
+
+      {/* Sub-navigation Tabs */}
+      <div className="flex border-b border-gray-200 dark:border-slate-800 mb-2 bg-white dark:bg-slate-900 rounded-xl p-1.5 shadow-sm border shrink-0">
+        <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200/50 self-start md:self-auto shrink-0">
+          
             <button
               onClick={() => setActiveSubTab('manage')}
               className={cn(
                 "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5",
                 activeSubTab === 'manage' 
                   ? "bg-white text-orange-700 shadow-md" 
-                  : "text-orange-100 hover:text-white"
+                  : "text-slate-500 hover:text-slate-700 hover:text-indigo-700 shadow-sm"
               )}
             >
               <Sliders size={14} />
@@ -448,7 +455,7 @@ export function GoalSettingView({ cardOpacity }: { cardOpacity: number }) {
                 "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5",
                 activeSubTab === 'create' 
                   ? "bg-white text-orange-700 shadow-md" 
-                  : "text-orange-100 hover:text-white"
+                  : "text-slate-500 hover:text-slate-700 hover:text-indigo-700 shadow-sm"
               )}
             >
               <Plus size={14} />
@@ -461,15 +468,16 @@ export function GoalSettingView({ cardOpacity }: { cardOpacity: number }) {
                 "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center space-x-1.5",
                 activeSubTab === 'tree' 
                   ? "bg-white text-orange-700 shadow-md" 
-                  : "text-orange-100 hover:text-white"
+                  : "text-slate-500 hover:text-slate-700 hover:text-indigo-700 shadow-sm"
               )}
             >
               <GitPullRequest size={14} />
               <span>Sơ đồ liên kết</span>
             </button>
-          </div>
+          
         </div>
       </div>
+
 
       {/* CONTENT AREA */}
       <div className="flex-1 flex flex-col gap-6 min-h-0">

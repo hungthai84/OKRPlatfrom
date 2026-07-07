@@ -212,13 +212,19 @@ export function NotesView({ cardOpacity }: { cardOpacity: number }) {
         </div>
 
         {/* SUB NAVIGATION TABS */}
-        <div className="mt-6 pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+        
+      </div>
+
+      {/* Sub-navigation Tabs */}
+      <div className="flex border-b border-gray-200 dark:border-slate-800 mb-2 bg-white dark:bg-slate-900 rounded-xl p-1.5 shadow-sm border shrink-0">
+        <div className="flex flex-wrap items-center justify-between gap-4 w-full px-2 py-1">
+          
           <div className="flex space-x-6 text-sm font-semibold">
             <button 
               onClick={() => setActiveSubTab('all')}
               className={cn(
                 "pb-1 border-b-2 cursor-pointer transition-all",
-                activeSubTab === 'all' ? "border-orange-500 text-white font-bold" : "border-transparent text-gray-400 hover:text-white"
+                activeSubTab === 'all' ? "border-orange-500 text-slate-800 dark:text-slate-200 font-bold" : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200"
               )}
             >
               Tất cả ghi chú ({notes.length})
@@ -227,7 +233,7 @@ export function NotesView({ cardOpacity }: { cardOpacity: number }) {
               onClick={() => setActiveSubTab('my-notes')}
               className={cn(
                 "pb-1 border-b-2 cursor-pointer transition-all",
-                activeSubTab === 'my-notes' ? "border-orange-500 text-white font-bold" : "border-transparent text-gray-400 hover:text-white"
+                activeSubTab === 'my-notes' ? "border-orange-500 text-slate-800 dark:text-slate-200 font-bold" : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200"
               )}
             >
               Cá nhân tôi
@@ -236,14 +242,16 @@ export function NotesView({ cardOpacity }: { cardOpacity: number }) {
               onClick={() => setActiveSubTab('shared')}
               className={cn(
                 "pb-1 border-b-2 cursor-pointer transition-all",
-                activeSubTab === 'shared' ? "border-orange-500 text-white font-bold" : "border-transparent text-gray-400 hover:text-white"
+                activeSubTab === 'shared' ? "border-orange-500 text-slate-800 dark:text-slate-200 font-bold" : "border-transparent text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:text-slate-200"
               )}
             >
               Chia sẻ chung
             </button>
           </div>
+        
         </div>
       </div>
+
 
       {/* 2. MAIN SECTION WITH CATEGORIES FILTER & NOTES GRID */}
       <div className="flex flex-col md:flex-row gap-6 flex-1 items-start">
